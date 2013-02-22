@@ -1,0 +1,43 @@
+REQUIREMENTS
+-A game where you are a sphere with eyes that can somehow use everyday objects (guns, bats, etc...)
+-Game will have multiple routes and future situations will reflect that (kill-all route vs. stealth)
+-Will be able to save your game, but only have one game save at a time
+-Storyline will follow main character fleeing from antagonist but come back to defeat antagonist
+-Main character will have two other consiences speaking to him (also serve as help to the player)
+ -Benign and malevolent personalities
+-3 attributes can be applied to the main character
+ -primary object (gun, bat, laser, etc...)
+ -secondary object (hats mostly, but usefull hats)
+ -material (steel, fire, bounce, idk...)
+-artistic backgrounds (hopefully)
+-controls
+ -AD-space movement
+ -cursor for directing actions and partial camera
+ -left-click = primary action (on-click or on-hold depending on primary object)
+ -right-click = secondary action (make your hats work for you, same as prmary control)
+ -E access or use world objects
+ -ESC pauses game 
+-fall damage only from extreme distance
+-finding keys may unlock rooms with bonus objects
+
+
+SCREENS
+-Main Menu
+-Gameplay
+
+OVERLAYS
+-Options
+-Pause
+-Customization
+-Endlevel
+
+
+PRIMARY OBJECTS
+-Sniper		Powerful, precise, low ammo, distance, slow
+-Bat		Non-lethal, melee, no ammo
+-Laser		On-hold use, med power x duration, distance
+-Railgun	One-hit kill normal enemies, potential lethal kick, distance
+-ElecSaw	Melee, lethal, ammo=charge
+-Shotgun	Powerful scatter, med ammo,
+-MachineGun	Weak x duration, high ammo, high speed
+-Pistol		med power, med ammo, slow
