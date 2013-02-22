@@ -8,7 +8,7 @@
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 
-// #include "inputclass.h"
+#include "inputclass.h"
 // #include "graphicsclass.h"
 
 class SystemClass
@@ -29,7 +29,7 @@ private:
 	HINSTANCE m_hinstance;
 	HWND m_hwnd;
 
-	// InputClass* m_Input;
+	InputClass* m_Input;
 	// GraphicsClass* m_Graphics;
 
 	bool Frame();

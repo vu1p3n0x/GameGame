@@ -6,12 +6,13 @@
 
 SystemClass::SystemClass()
 {
-	// m_input = NULL;
+	m_Input = NULL;
 	// m_Graphics = NULL;
 }
 SystemClass::SystemClass(const SystemClass& systemclass)
 {
-
+	m_Input = NULL;
+	// m_Graphics = NULL;
 }
 
 SystemClass::~SystemClass()
@@ -28,11 +29,9 @@ bool SystemClass::Initialize()
 
 	InitializeWindows(screenWidth, screenHeight);
 
-	/*
 	m_Input = new InputClass;
 	if (!m_Input)
 		return false;
-	*/
 
 	/*
 	m_Graphics = new GraphicsClass;
@@ -49,21 +48,19 @@ bool SystemClass::Initialize()
 }
 void SystemClass::Shutdown()
 {
+	if (m_Input)
+	{
+		m_Input->Shutdown();
+		delete m_Input;
+		m_Input = NULL;
+	}
+
 	/*
 	if (m_Graphics)
 	{
 		m_Graphics->Shutdown();
 		delete m_Graphics;
 		m_Graphics = NULL;
-	}
-	*/
-
-	/*
-	if (m_Input)
-	{
-		m_Input->Shutdown();
-		delete m_Input;
-		m_Input = NULL;
 	}
 	*/
 
@@ -95,10 +92,8 @@ void SystemClass::Run()
 }
 bool SystemClass::Frame()
 {
-	/*
 	if (m_Input->IsKeyDown(VK_ESCAPE))
 		return false;
-	*/
 
 	/*
 	if (!m_Graphics->Frame())
@@ -199,11 +194,11 @@ LRESULT CALLBACK SystemClass::MessageHandler(HWND hwnd, UINT umsg, WPARAM wparam
 	switch(umsg)
 	{
 	case WM_KEYDOWN:
-		// m_Input->KeyDown((unsigned int)wparam);
+		m_Input->KeyDown((unsigned int)wparam);
 		return 0;
 		
 	case WM_KEYUP:
-		// m_Input->KeyUp((unsigned int)wparam);
+		m_Input->KeyUp((unsigned int)wparam);
 		return 0;
 
 	default:
