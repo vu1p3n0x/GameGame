@@ -7,12 +7,12 @@
 SystemClass::SystemClass()
 {
 	m_Input = NULL;
-	// m_Graphics = NULL;
+	m_Graphics = NULL;
 }
 SystemClass::SystemClass(const SystemClass& systemclass)
 {
 	m_Input = NULL;
-	// m_Graphics = NULL;
+	m_Graphics = NULL;
 }
 
 SystemClass::~SystemClass()
@@ -22,6 +22,7 @@ SystemClass::~SystemClass()
 
 bool SystemClass::Initialize()
 {
+	
 	int screenWidth, screenHeight;
 
 	screenWidth = 0;
@@ -30,20 +31,18 @@ bool SystemClass::Initialize()
 	InitializeWindows(screenWidth, screenHeight);
 
 	m_Input = new InputClass;
-	if (!m_Input)
+	if(!m_Input)
 		return false;
 
-	/*
+	m_Input->Initialize();
+
 	m_Graphics = new GraphicsClass;
-	if (!m_Graphics)
+	if(!m_Graphics)
 		return false;
-	*/
 
-	/*
-	if (!m_Graphics->Initialize(screenWidth, screenHeight, m_hwnd))
+	if(!(m_Graphics->Initialize(screenWidth, screenHeight, m_hwnd)))
 		return false;
-	*/
-
+	
 	return true;
 }
 void SystemClass::Shutdown()
@@ -55,14 +54,12 @@ void SystemClass::Shutdown()
 		m_Input = NULL;
 	}
 
-	/*
 	if (m_Graphics)
 	{
 		m_Graphics->Shutdown();
 		delete m_Graphics;
 		m_Graphics = NULL;
 	}
-	*/
 
 	ShutdownWindows();
 }
@@ -95,10 +92,8 @@ bool SystemClass::Frame()
 	if (m_Input->IsKeyDown(VK_ESCAPE))
 		return false;
 
-	/*
-	if (!m_Graphics->Frame())
+	if (!(m_Graphics->Frame()))
 		return false;
-	*/
 
 	return true;
 }
@@ -133,8 +128,7 @@ void SystemClass::InitializeWindows(int& screenWidth, int& screenHeight)
 	screenWidth  = GetSystemMetrics(SM_CXSCREEN);
 	screenHeight = GetSystemMetrics(SM_CYSCREEN);
 
-	// if(FULL_SCREEN)
-	if (false)
+	if(FULL_SCREEN)
 	{
 		memset(&dmScreenSettings, 0, sizeof(dmScreenSettings));
 		dmScreenSettings.dmSize       = sizeof(dmScreenSettings);
@@ -172,8 +166,7 @@ void SystemClass::ShutdownWindows()
 {
 	ShowCursor(true);
 
-	// if(FULL_SCREEN)
-	if (false)
+	if(FULL_SCREEN)
 	{
 		ChangeDisplaySettings(NULL, 0);
 	}

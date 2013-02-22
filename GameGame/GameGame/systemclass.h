@@ -9,7 +9,7 @@
 #include <Windows.h>
 
 #include "inputclass.h"
-// #include "graphicsclass.h"
+#include "graphicsclass.h"
 
 class SystemClass
 {
@@ -30,7 +30,7 @@ private:
 	HWND m_hwnd;
 
 	InputClass* m_Input;
-	// GraphicsClass* m_Graphics;
+	GraphicsClass* m_Graphics;
 
 	bool Frame();
 	void InitializeWindows(int&, int&);
