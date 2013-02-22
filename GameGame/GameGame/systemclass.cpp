@@ -47,7 +47,6 @@ bool SystemClass::Initialize()
 
 	return true;
 }
-
 void SystemClass::Shutdown()
 {
 	/*
@@ -70,7 +69,6 @@ void SystemClass::Shutdown()
 
 	ShutdownWindows();
 }
-
 void SystemClass::Run()
 {
 	MSG msg;
@@ -95,7 +93,6 @@ void SystemClass::Run()
 			done = true;
 	}
 }
-
 bool SystemClass::Frame()
 {
 	/*
@@ -109,24 +106,6 @@ bool SystemClass::Frame()
 	*/
 
 	return true;
-}
-
-LRESULT CALLBACK SystemClass::MessageHandler(HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam)
-{
-	switch(umsg)
-	{
-	case WM_KEYDOWN:
-		// m_Input->KeyDown((unsigned int)wparam);
-		return 0;
-		
-	case WM_KEYUP:
-		// m_Input->KeyUp((unsigned int)wparam);
-		return 0;
-
-	default:
-		return DefWindowProc(hwnd, umsg, wparam, lparam);
-
-	}
 }
 
 void SystemClass::InitializeWindows(int& screenWidth, int& screenHeight)
@@ -194,7 +173,6 @@ void SystemClass::InitializeWindows(int& screenWidth, int& screenHeight)
 
 	return;
 }
-
 void SystemClass::ShutdownWindows()
 {
 	ShowCursor(true);
@@ -216,6 +194,23 @@ void SystemClass::ShutdownWindows()
 	return;
 }
 
+LRESULT CALLBACK SystemClass::MessageHandler(HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam)
+{
+	switch(umsg)
+	{
+	case WM_KEYDOWN:
+		// m_Input->KeyDown((unsigned int)wparam);
+		return 0;
+		
+	case WM_KEYUP:
+		// m_Input->KeyUp((unsigned int)wparam);
+		return 0;
+
+	default:
+		return DefWindowProc(hwnd, umsg, wparam, lparam);
+
+	}
+}
 LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)
 {
 	switch(umessage)
