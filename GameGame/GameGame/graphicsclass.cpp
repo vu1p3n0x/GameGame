@@ -45,7 +45,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	if (!m_model)
 		return false;
 
-	if (!(m_model->Initialize(m_d3d->GetDevice())))
+	if (!(m_model->Initialize(m_d3d->GetDevice(), L"")))
 	{
 		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
 		return false;

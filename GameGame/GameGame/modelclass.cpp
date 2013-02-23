@@ -8,26 +8,32 @@ ModelClass::ModelClass()
 {
 	m_vertexBuffer = NULL;
 	m_indexBuffer = NULL;
+	m_texture = NULL;
 }
 ModelClass::ModelClass(const ModelClass& modelclass)
 {
 	m_vertexBuffer = NULL;
 	m_indexBuffer = NULL;
+	m_texture = NULL;
 }
 ModelClass::~ModelClass()
 {
 
 }
 
-bool ModelClass::Initialize(ID3D11Device* device)
+bool ModelClass::Initialize(ID3D11Device* device, WCHAR* textureFilename)
 {
 	if (!InitializeBuffers(device))
+		return false;
+
+	if (!LoadTexture(device, textureFilename))
 		return false;
 
 	return true;
 }
 void ModelClass::Shutdown()
 {
+	ReleaseTexture();
 	ShutdownBuffers();
 }
 void ModelClass::Render(ID3D11DeviceContext* deviceContext)
@@ -38,6 +44,10 @@ void ModelClass::Render(ID3D11DeviceContext* deviceContext)
 int ModelClass::GetIndexCount()
 {
 	return m_indexCount;
+}
+ID3D11ShaderResourceView* ModelClass::GetTexture()
+{
+	return m_texture->GetTexture();
 }
 
 bool ModelClass::InitializeBuffers(ID3D11Device* device)
@@ -60,13 +70,13 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 		return false;
 
 	vertices[0].position = D3DXVECTOR3(-1.0f, -1.0f, 0.0f);
-	vertices[0].color = D3DXVECTOR4(0.0f, 1.0f, 0.0f, 1.0f);
+	vertices[0].texture = D3DXVECTOR2(0.0f, 1.0f);
 
 	vertices[1].position = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
-	vertices[1].color = D3DXVECTOR4(0.0f, 1.0f, 0.0f, 1.0f);
+	vertices[1].texture = D3DXVECTOR2(0.5f, 0.0f);
 	
 	vertices[2].position = D3DXVECTOR3(1.0f, -1.0f, 0.0f);
-	vertices[2].color = D3DXVECTOR4(0.0f, 1.0f, 0.0f, 1.0f);
+	vertices[2].texture = D3DXVECTOR2(1.0f, 1.0f);
 	
 	indices[0] = 0;
 	indices[1] = 1;
@@ -135,4 +145,25 @@ void ModelClass::RenderBuffers(ID3D11DeviceContext* deviceContext)
 	deviceContext->IASetVertexBuffers(0, 1, &m_vertexBuffer, &stride, &offset);
 	deviceContext->IASetIndexBuffer(m_indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+}
+
+bool ModelClass::LoadTexture(ID3D11Device* device, WCHAR* filename)
+{
+	m_texture = new TextureClass;
+	if (!m_texture)
+		return false;
+
+	if (!(m_texture->Initialize(device, filename)))
+		return false;
+
+	return true;
+}
+void ModelClass::ReleaseTexture()
+{
+	if (m_texture)
+	{
+		m_texture->Shutdown();
+		delete m_texture;
+		m_texture = NULL;
+	}
 }
