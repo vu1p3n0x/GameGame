@@ -35,7 +35,6 @@ void TextureClass::Shutdown()
 	if (m_texture)
 	{
 		m_texture->Release();
-		delete m_texture;
 		m_texture = NULL;
 	}
 }

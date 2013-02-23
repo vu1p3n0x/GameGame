@@ -9,14 +9,14 @@ GraphicsClass::GraphicsClass()
 	m_d3d = NULL;
 	m_camera = NULL;
 	m_model = NULL;
-	m_colorShader = NULL;
+	m_textureShader = NULL;
 }
 GraphicsClass::GraphicsClass(const GraphicsClass& graphicsclass)
 {
 	m_d3d = NULL;
 	m_camera = NULL;
 	m_model = NULL;
-	m_colorShader = NULL;
+	m_textureShader = NULL;
 }
 GraphicsClass::~GraphicsClass()
 {
@@ -45,28 +45,28 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	if (!m_model)
 		return false;
 
-	if (!(m_model->Initialize(m_d3d->GetDevice(), L"")))
+	if (!(m_model->Initialize(m_d3d->GetDevice(), L"../GameGame/data/seafloor.dds")))
 	{
 		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
 		return false;
 	}
 
-	m_colorShader = new ColorShaderClass;
-	if (!m_colorShader)
+	m_textureShader = new TextureShaderClass;
+	if (!m_textureShader)
 		return false;
 
-	if (!(m_colorShader->Initialize(m_d3d->GetDevice(), hwnd)))
+	if (!(m_textureShader->Initialize(m_d3d->GetDevice(), hwnd)))
 		return false;
 
 	return true;
 }
 void GraphicsClass::Shutdown()
 {
-	if (m_colorShader)
+	if (m_textureShader)
 	{
-		m_colorShader->Shutdown();
-		delete m_colorShader;
-		m_colorShader = NULL;
+		m_textureShader->Shutdown();
+		delete m_textureShader;
+		m_textureShader = NULL;
 	}
 
 	if (m_model)
@@ -111,7 +111,7 @@ bool GraphicsClass::Render()
 
 	m_model->Render(m_d3d->GetDeviceContext());
 
-	if (!(m_colorShader->Render(m_d3d->GetDeviceContext(), m_model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix)))
+	if (!(m_textureShader->Render(m_d3d->GetDeviceContext(), m_model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix, m_model->GetTexture())))
 		return false;
 
 	m_d3d->EndScene();
