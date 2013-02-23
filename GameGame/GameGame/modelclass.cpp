@@ -107,6 +107,8 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 
 	delete [] indices;
 	indices = NULL;
+
+	return true;
 }
 void ModelClass::ShutdownBuffers()
 {
