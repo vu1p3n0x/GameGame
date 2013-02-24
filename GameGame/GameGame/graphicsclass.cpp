@@ -39,13 +39,13 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	if (!m_camera)
 		return false;
 
-	m_camera->SetPosition(0.0f, 0.0f, -10.0f);
+	m_camera->SetPosition(0.0f, 0.0f, -3.0f);
 
 	m_model = new ModelClass;
 	if (!m_model)
 		return false;
 
-	if (!(m_model->Initialize(m_d3d->GetDevice(), L"../GameGame/data/seafloor.dds")))
+	if (!(m_model->Initialize(m_d3d->GetDevice(), L"../GameGame/data/testpng.png")))
 	{
 		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
 		return false;

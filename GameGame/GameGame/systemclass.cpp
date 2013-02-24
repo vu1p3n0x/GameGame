@@ -143,8 +143,8 @@ void SystemClass::InitializeWindows(int& screenWidth, int& screenHeight)
 	}
 	else
 	{
-		screenWidth  = 800;
-		screenHeight = 600;
+		screenWidth  = 1200;
+		screenHeight = 900;
 
 		posX = (GetSystemMetrics(SM_CXSCREEN) - screenWidth)  / 2;
 		posY = (GetSystemMetrics(SM_CYSCREEN) - screenHeight) / 2;
