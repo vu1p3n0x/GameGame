@@ -10,8 +10,6 @@
 #include <d3dx11async.h>
 #include <fstream>
 
-#define ofstream std::ofstream
-
 class ColorShaderClass
 {
 public:

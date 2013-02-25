@@ -1,5 +1,5 @@
 // FILE: graphicsclass.h
-// DATE: 2/22/13
+// DATE: 2/22/13 - 2/24/13
 // DESC: declaration for the graphics class to manage window
 
 #ifndef GRAPHICSCLASS_H

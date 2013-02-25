@@ -1,5 +1,5 @@
 // FILE: d3dclass.h
-// DATE: 2/22/13
+// DATE: 2/22/13 - 2/24/13
 // DESC: declaration of the d3d class to handle 3d graphics
 
 #ifndef D3DCLASS_H

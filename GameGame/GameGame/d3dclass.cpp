@@ -1,5 +1,5 @@
 // FILE: d3dclass.cpp
-// DATE: 2/22/13
+// DATE: 2/22/13 - 2/24/13
 // DESC: implementation of the d3d class to handle 3d graphics
 
 #include "d3dclass.h"

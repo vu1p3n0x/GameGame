@@ -1,5 +1,5 @@
 // FILE: graphicsclass.cpp
-// DATE: 2/22/13
+// DATE: 2/22/13 - 2/24/13
 // DESC: implemenation for the graphics class to manage window
 
 #include "graphicsclass.h"
