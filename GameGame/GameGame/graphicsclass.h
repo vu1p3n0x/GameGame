@@ -8,7 +8,7 @@
 #include <Windows.h>
 #include "d3dclass.h"
 #include "cameraclass.h"
-#include "modelclass.h"
+#include "bitmapclass.h"
 #include "textureshaderclass.h"
 
 const bool FULL_SCREEN = false;
@@ -31,7 +31,7 @@ public:
 private:
 	D3DClass* m_d3d;
 	CameraClass* m_camera;
-	ModelClass* m_model;
+	BitmapClass* m_bitmap;
 	TextureShaderClass* m_textureShader;
 
 	bool Render();
