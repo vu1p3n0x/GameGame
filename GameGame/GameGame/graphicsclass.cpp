@@ -10,6 +10,7 @@ GraphicsClass::GraphicsClass()
 	m_camera = NULL;
 	m_bitmap = NULL;
 	m_textureShader = NULL;
+	m_text = NULL;
 }
 GraphicsClass::GraphicsClass(const GraphicsClass& graphicsclass)
 {
@@ -17,6 +18,7 @@ GraphicsClass::GraphicsClass(const GraphicsClass& graphicsclass)
 	m_camera = NULL;
 	m_bitmap = NULL;
 	m_textureShader = NULL;
+	m_text = NULL;
 }
 GraphicsClass::~GraphicsClass()
 {
@@ -25,6 +27,8 @@ GraphicsClass::~GraphicsClass()
 
 bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 {
+	D3DXMATRIX baseViewMatrix;
+
 	m_d3d = new D3DClass;
 	if (!m_d3d)
 		return false;
@@ -39,7 +43,9 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	if (!m_camera)
 		return false;
 
-	m_camera->SetPosition(0.0f, 0.0f, -3.0f);
+	m_camera->SetPosition(0.0f, 0.0f, -1.0f);
+	m_camera->Render();
+	m_camera->GetViewMatrix(baseViewMatrix);
 
 	m_bitmap = new BitmapClass;
 	if (!m_bitmap)
@@ -58,10 +64,27 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	if (!(m_textureShader->Initialize(m_d3d->GetDevice(), hwnd)))
 		return false;
 
+	m_text = new TextClass;
+	if (!m_text)
+		return false;
+
+	if (!(m_text->Initialize(m_d3d->GetDevice(), m_d3d->GetDeviceContext(), hwnd, screenWidth, screenHeight, baseViewMatrix)))
+	{
+		MessageBox(hwnd, L"Could not initialize the text object.", L"Error", MB_OK);
+		return false;
+	}
+
 	return true;
 }
 void GraphicsClass::Shutdown()
 {
+	if (m_text)
+	{
+		m_text->Shutdown();
+		delete m_text;
+		m_text = NULL;
+	}
+
 	if (m_textureShader)
 	{
 		m_textureShader->Shutdown();
@@ -111,6 +134,13 @@ bool GraphicsClass::Render()
 	m_d3d->GetOrthoMatrix(orthoMatrix);
 
 	m_d3d->TurnZBufferOff();
+
+	m_d3d->TurnOnAlphaBlending();
+
+	if (!(m_text->Render(m_d3d->GetDeviceContext(), worldMatrix, orthoMatrix)))
+		return false;
+
+	m_d3d->TurnOffAlphaBlending();
 
 	if (!(m_bitmap->Render(m_d3d->GetDeviceContext(), 100, 100)))
 		return false;

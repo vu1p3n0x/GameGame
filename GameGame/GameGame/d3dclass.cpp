@@ -15,6 +15,8 @@ D3DClass::D3DClass()
 	m_depthDisabledStencilState = NULL;
 	m_depthStencilView = NULL;
 	m_rasterState = NULL;
+	m_alphaEnabledBlendingState = NULL;
+	m_alphaDisabledBlendingState = NULL;
 }
 D3DClass::D3DClass(const D3DClass& d3dclass)
 {
@@ -27,6 +29,8 @@ D3DClass::D3DClass(const D3DClass& d3dclass)
 	m_depthDisabledStencilState = NULL;
 	m_depthStencilView = NULL;
 	m_rasterState = NULL;
+	m_alphaEnabledBlendingState = NULL;
+	m_alphaDisabledBlendingState = NULL;
 }
 D3DClass::~D3DClass()
 {
@@ -54,6 +58,8 @@ bool D3DClass::Initialize(int screenWidth, int screenHeight, bool vsync, HWND hw
 	D3D11_RASTERIZER_DESC rasterDesc;
 	D3D11_VIEWPORT viewport;
 	float fieldOfView, screenAspect;
+
+	D3D11_BLEND_DESC blendStateDescription;
 
 	// set local member
 	m_vsync_enabled = vsync;
@@ -338,6 +344,27 @@ bool D3DClass::Initialize(int screenWidth, int screenHeight, bool vsync, HWND hw
 	if(FAILED(result))
 		return false;
 
+	ZeroMemory(&blendStateDescription, sizeof(D3D11_BLEND_DESC));
+
+	blendStateDescription.RenderTarget[0].BlendEnable = TRUE;
+	blendStateDescription.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
+	blendStateDescription.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+	blendStateDescription.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+	blendStateDescription.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+	blendStateDescription.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+	blendStateDescription.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+	blendStateDescription.RenderTarget[0].RenderTargetWriteMask = 0x0f;
+
+	result = m_device->CreateBlendState(&blendStateDescription, &m_alphaEnabledBlendingState);
+	if(FAILED(result))
+		return false;
+
+	blendStateDescription.RenderTarget[0].BlendEnable = FALSE;
+
+	result = m_device->CreateBlendState(&blendStateDescription, &m_alphaDisabledBlendingState);
+	if(FAILED(result))
+		return false;
+
 	return true;
 }
 void D3DClass::Shutdown()
@@ -346,6 +373,19 @@ void D3DClass::Shutdown()
 	{
 		m_swapChain->SetFullscreenState(false, NULL);
 	}
+
+	if(m_alphaEnabledBlendingState)
+	{
+		m_alphaEnabledBlendingState->Release();
+		m_alphaEnabledBlendingState = 0;
+	}
+
+	if(m_alphaDisabledBlendingState)
+	{
+		m_alphaDisabledBlendingState->Release();
+		m_alphaDisabledBlendingState = 0;
+	}
+
 
 	if(m_rasterState)
 	{
@@ -450,6 +490,29 @@ void D3DClass::TurnZBufferOn()
 void D3DClass::TurnZBufferOff()
 {
 	m_deviceContext->OMSetDepthStencilState(m_depthDisabledStencilState, 1);
+}
+
+void D3DClass::TurnOnAlphaBlending()
+{
+	float blendFactor[4];
+	
+	blendFactor[0] = 0.0f;
+	blendFactor[1] = 0.0f;
+	blendFactor[2] = 0.0f;
+	blendFactor[3] = 0.0f;
+	
+	m_deviceContext->OMSetBlendState(m_alphaEnabledBlendingState, blendFactor, 0xffffffff);
+}
+void D3DClass::TurnOffAlphaBlending()
+{
+	float blendFactor[4];
+	
+	blendFactor[0] = 0.0f;
+	blendFactor[1] = 0.0f;
+	blendFactor[2] = 0.0f;
+	blendFactor[3] = 0.0f;
+	
+	m_deviceContext->OMSetBlendState(m_alphaDisabledBlendingState, blendFactor, 0xffffffff);
 }
 
 void D3DClass::GetVideoCardInfo(char* cardName, int& memory)

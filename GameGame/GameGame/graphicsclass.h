@@ -10,6 +10,7 @@
 #include "cameraclass.h"
 #include "bitmapclass.h"
 #include "textureshaderclass.h"
+#include "textclass.h"
 
 const bool FULL_SCREEN = false;
 const bool VSYNC_ENABLED = false;
@@ -33,6 +34,7 @@ private:
 	CameraClass* m_camera;
 	BitmapClass* m_bitmap;
 	TextureShaderClass* m_textureShader;
+	TextClass* m_text;
 
 	bool Render();
 };

@@ -38,6 +38,9 @@ public:
 	void TurnZBufferOn();
 	void TurnZBufferOff();
 
+	void TurnOnAlphaBlending();
+	void TurnOffAlphaBlending();
+
 	void GetVideoCardInfo(char*, int&);
 
 private:
@@ -51,10 +54,14 @@ private:
 	ID3D11DeviceContext* m_deviceContext;
 	ID3D11RenderTargetView* m_renderTargetView;
 	ID3D11Texture2D* m_depthStencilBuffer;
-	ID3D11DepthStencilState* m_depthStencilState;
-	ID3D11DepthStencilState* m_depthDisabledStencilState;
 	ID3D11DepthStencilView* m_depthStencilView;
 	ID3D11RasterizerState* m_rasterState;
+
+	ID3D11DepthStencilState* m_depthStencilState;
+	ID3D11DepthStencilState* m_depthDisabledStencilState;
+
+	ID3D11BlendState* m_alphaEnabledBlendingState;
+	ID3D11BlendState* m_alphaDisabledBlendingState;
 
 	D3DXMATRIX m_projectionMatrix;
 	D3DXMATRIX m_worldMatrix;

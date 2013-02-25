@@ -14,15 +14,15 @@ struct VertexInputType
 	float4 position : POSITION;
 	float2 tex: TEXCOORD0;
 };
-struct PixelOutputType
+struct PixelInputType
 {
-	float position : SV_POSITION;
+	float4 position : SV_POSITION;
 	float2 tex : TEXCOORD0;
 };
 
-PixelOutputType FontVertexShader(VertexInputType input)
+PixelInputType FontVertexShader(VertexInputType input)
 {
-	PixelOutputType output;
+	PixelInputType output;
 
 	input.position.w = 1.0f;
 
