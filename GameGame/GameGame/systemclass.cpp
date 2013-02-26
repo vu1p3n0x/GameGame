@@ -102,7 +102,11 @@ void SystemClass::InitializeWindows(int& screenWidth, int& screenHeight)
 {
 	WNDCLASSEX wc;
 	DEVMODE dmScreenSettings;
-	int posX, posY;
+	DWORD ExStyle, Style;
+	RECT WindowSize;
+
+	ExStyle = WS_EX_APPWINDOW;
+	Style = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_POPUP;
 
 	ApplicationHandle = this;
 
@@ -125,11 +129,11 @@ void SystemClass::InitializeWindows(int& screenWidth, int& screenHeight)
 	
 	RegisterClassEx(&wc);
 
-	screenWidth  = GetSystemMetrics(SM_CXSCREEN);
-	screenHeight = GetSystemMetrics(SM_CYSCREEN);
-
 	if(FULL_SCREEN)
 	{
+		screenWidth  = GetSystemMetrics(SM_CXSCREEN);
+		screenHeight = GetSystemMetrics(SM_CYSCREEN);
+
 		memset(&dmScreenSettings, 0, sizeof(dmScreenSettings));
 		dmScreenSettings.dmSize       = sizeof(dmScreenSettings);
 		dmScreenSettings.dmPelsWidth  = (unsigned long)screenWidth;
@@ -139,21 +143,25 @@ void SystemClass::InitializeWindows(int& screenWidth, int& screenHeight)
 
 		ChangeDisplaySettings(&dmScreenSettings, CDS_FULLSCREEN);
 
-		posX = posY = 0;
+		WindowSize.left = 0;
+		WindowSize.top = 0;
+		WindowSize.right = GetSystemMetrics(SM_CXSCREEN);
+		WindowSize.bottom = GetSystemMetrics(SM_CYSCREEN);
 	}
 	else
 	{
-		screenWidth  = 1200;
-		screenHeight = 900;
-
-		posX = (GetSystemMetrics(SM_CXSCREEN) - screenWidth)  / 2;
-		posY = (GetSystemMetrics(SM_CYSCREEN) - screenHeight) / 2;
+		screenWidth  = 1280;
+		screenHeight = 720;
+		
+		WindowSize.left = (GetSystemMetrics(SM_CXSCREEN) - screenWidth)  / 2;
+		WindowSize.top = (GetSystemMetrics(SM_CYSCREEN) - screenHeight) / 2;
+		WindowSize.right = WindowSize.left + screenWidth;
+		WindowSize.bottom = WindowSize.top + screenHeight;
 	}
 	
-	/*m_hwnd = CreateWindowEx(WS_EX_APPWINDOW, m_applicationName, m_applicationName, 
-				WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_POPUP,
-				posX, posY, screenWidth, screenHeight, NULL, NULL, m_hinstance, NULL);*/
-	m_hwnd = CreateWindowEx(WS_EX_APPWINDOW, m_applicationName, m_applicationName, WS_OVERLAPPEDWINDOW | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_POPUP, posX, posY, screenWidth, screenHeight, NULL, NULL, m_hinstance, NULL);
+	AdjustWindowRectEx(&WindowSize, Style, FALSE, ExStyle);
+
+	m_hwnd = CreateWindowEx(ExStyle, m_applicationName, m_applicationName, Style, WindowSize.left, WindowSize.top, WindowSize.right-WindowSize.left, WindowSize.bottom-WindowSize.top, NULL, NULL, m_hinstance, NULL);
 
 	ShowWindow(m_hwnd, SW_SHOW);
 	SetForegroundWindow(m_hwnd);

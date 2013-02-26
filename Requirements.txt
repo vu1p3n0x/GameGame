@@ -41,3 +41,27 @@ PRIMARY OBJECTS
 -Shotgun	Powerful scatter, med ammo,
 -MachineGun	Weak x duration, high ammo, high speed
 -Pistol		med power, med ammo, slow
+
+
+
+class Text
+
+private:
+  FontClass* m_font;
+  char* m_text;
+  ID3D11Buffer* m_indexBuffer, * m_vertexBuffer;
+  int vertexCount, indexCount;
+  color m_color;
+  
+public:
+  Text();
+  Text(const Text&);
+  ~Text();
+  
+  Initialize();
+  Render();
+  Shutdown();
+  
+  SetFont(FontClass*);
+  SetText(char*);
+  SetPosition(float, float);
