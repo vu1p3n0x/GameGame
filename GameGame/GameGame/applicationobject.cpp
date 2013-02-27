@@ -12,9 +12,7 @@ ApplicationObject::ApplicationObject(LPCWSTR name)
 }
 ApplicationObject::ApplicationObject(const ApplicationObject& application)
 {
-	AppObject = this;
-	m_instance = GetModuleHandle(NULL);
-	m_name = L"";
+
 }
 ApplicationObject::~ApplicationObject()
 {
@@ -75,6 +73,10 @@ void ApplicationObject::InitializeWindow(int width, int height, const bool& full
 		WindowSize.right = WindowSize.left + width;
 		WindowSize.bottom = WindowSize.top + height;
 	}
+
+	m_fullscreen = fullscreen;
+	m_width = width;
+	m_height = height;
 	
 	AdjustWindowRectEx(&WindowSize, Style, FALSE, ExStyle);
 	m_hwnd = CreateWindowEx(ExStyle, m_name, m_name, Style, WindowSize.left, WindowSize.top, WindowSize.right-WindowSize.left, WindowSize.bottom-WindowSize.top, NULL, NULL, m_instance, NULL);
@@ -83,6 +85,8 @@ void ApplicationObject::InitializeWindow(int width, int height, const bool& full
 	SetForegroundWindow(m_hwnd);
 	SetFocus(m_hwnd);
 
+	m_graphics = new GraphicsObject(m_hwnd, m_width, m_height, m_fullscreen);
+
 	return;
 }
 void ApplicationObject::Run()
@@ -90,8 +94,7 @@ void ApplicationObject::Run()
 	MSG msg;
 	ZeroMemory(&msg, sizeof(MSG));
 
-	//if (!Initialize())
-	//	return;
+	Initialize();
 
 	while (true)
 	{
@@ -104,8 +107,7 @@ void ApplicationObject::Run()
 		if (msg.message == WM_QUIT)
 			break;
 
-		//if (!Update())
-		//	break;
+		Update();
 	}
 }
 void ApplicationObject::ShutdownWindow()
@@ -130,9 +132,23 @@ HINSTANCE ApplicationObject::GetInstance()
 {
 	return m_instance;
 }
-HWND ApplicationObject::GetWindowHandle()
+
+int ApplicationObject::GetWidth()
 {
-	return m_hwnd;
+	return m_width;
+}
+int ApplicationObject::GetHeight()
+{
+	return m_height;
+}
+bool ApplicationObject::GetFullscreen()
+{
+	return m_fullscreen;
+}
+
+GraphicsObject* ApplicationObject::GetGraphicsObject()
+{
+	return m_graphics;
 }
 
 LRESULT CALLBACK ApplicationObject::MessageHandler(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)

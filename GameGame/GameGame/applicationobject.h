@@ -8,12 +8,20 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
+#include "graphicsobject.h"
+
 class ApplicationObject
 {
 private:
 	LPCWSTR   m_name;
 	HINSTANCE m_instance;
 	HWND      m_hwnd;
+
+	int m_width;
+	int m_height;
+	bool m_fullscreen;
+
+	GraphicsObject* m_graphics;
 
 protected:
 	virtual bool Initialize();
@@ -30,7 +38,12 @@ public:
 
 	LPCWSTR GetName();
 	HINSTANCE GetInstance();
-	HWND GetWindowHandle();
+
+	int GetWidth();
+	int GetHeight();
+	bool GetFullscreen();
+
+	GraphicsObject* GetGraphicsObject();
 
 	LRESULT CALLBACK MessageHandler(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 };

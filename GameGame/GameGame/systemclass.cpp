@@ -1,5 +1,5 @@
 // FILE: systemclass.cpp
-// DATE: 2/21/13 - 2/22/13
+// DATE: 2/21/13 - 2/26/13
 // DESC: implementation of the system class to run basic input and output classes
 
 #include "systemclass.h"
