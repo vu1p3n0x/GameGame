@@ -35,11 +35,9 @@ private:
 	bool Frame();
 	void InitializeWindows(int&, int&);
 	void ShutdownWindows();
-
 };
 
 static LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
-
 static SystemClass* ApplicationHandle = NULL;
 
 #endif

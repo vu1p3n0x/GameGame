@@ -34,7 +34,7 @@ private:
 	CameraClass* m_camera;
 	BitmapClass* m_bitmap;
 	TextureShaderClass* m_textureShader;
-	TextClass* m_text;
+	TextClass* m_text;      
 
 	bool Render();
 };

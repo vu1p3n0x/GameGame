@@ -22,7 +22,6 @@ SystemClass::~SystemClass()
 
 bool SystemClass::Initialize()
 {
-	
 	int screenWidth, screenHeight;
 
 	screenWidth = 0;
@@ -111,8 +110,7 @@ void SystemClass::InitializeWindows(int& screenWidth, int& screenHeight)
 	ApplicationHandle = this;
 
 	m_hinstance = GetModuleHandle(NULL);
-
-	m_applicationName = L"Game";
+	m_applicationName = L"GameGame";
 
 	wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
 	wc.lpfnWndProc = WndProc;
@@ -167,18 +165,12 @@ void SystemClass::InitializeWindows(int& screenWidth, int& screenHeight)
 	SetForegroundWindow(m_hwnd);
 	SetFocus(m_hwnd);
 
-	ShowCursor(true);
-
 	return;
 }
 void SystemClass::ShutdownWindows()
 {
-	ShowCursor(true);
-
 	if(FULL_SCREEN)
-	{
 		ChangeDisplaySettings(NULL, 0);
-	}
 
 	DestroyWindow(m_hwnd);
 	m_hwnd = NULL;
