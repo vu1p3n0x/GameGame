@@ -28,6 +28,7 @@ protected:
 	virtual bool Update();
 
 public:
+	ApplicationObject();
 	ApplicationObject(LPCWSTR name);
 	ApplicationObject(const ApplicationObject& application);
 	~ApplicationObject();
@@ -49,6 +50,5 @@ public:
 };
 
 static LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
-static ApplicationObject* AppObject = NULL;
 
 #endif;

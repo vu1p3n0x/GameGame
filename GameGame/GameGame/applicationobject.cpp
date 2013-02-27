@@ -3,10 +3,15 @@
 // DESC: implementation of the class to manage the application
 
 #include "applicationobject.h"
+#include "myapplication.h"
 
+ApplicationObject::ApplicationObject()
+{
+	m_instance = GetModuleHandle(NULL);
+	m_name = L"Game";
+}
 ApplicationObject::ApplicationObject(LPCWSTR name)
 {
-	AppObject = this;
 	m_instance = GetModuleHandle(NULL);
 	m_name = name;
 }
@@ -94,7 +99,8 @@ void ApplicationObject::Run()
 	MSG msg;
 	ZeroMemory(&msg, sizeof(MSG));
 
-	Initialize();
+	if (!Initialize())
+		return;
 
 	while (true)
 	{
@@ -105,9 +111,10 @@ void ApplicationObject::Run()
 		}
 
 		if (msg.message == WM_QUIT)
-			break;
+			return;
 
-		Update();
+		if (!Update())
+			return;
 	}
 }
 void ApplicationObject::ShutdownWindow()
