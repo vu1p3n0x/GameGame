@@ -6,7 +6,7 @@
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pScmdline, int iCmdshow)
 {
-	MyApplication* app = new MyApplication(L"TestGane");
+	MyApplication* app = new MyApplication(L"TestGame");
 	if (!app)
 		return 0;
 

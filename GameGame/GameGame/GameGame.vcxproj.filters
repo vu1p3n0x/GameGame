@@ -69,6 +69,9 @@
     <ClCompile Include="textobject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="fontobject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="systemclass.h">
@@ -120,6 +123,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="myapplication.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="fontobject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -6,11 +6,13 @@
 #define MYAPPLICATION_H
 
 #include "applicationobject.h"
+#include "fontobject.h"
 #include "textobject.h"
 
 class MyApplication : public ApplicationObject
 {
 private:
+	FontObject* myfontobject;
 	TextObject* mytextobject;
 
 public:

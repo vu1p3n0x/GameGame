@@ -10,7 +10,9 @@
 #include <string>
 
 #include "graphicsobject.h"
-#include "fontclass.h"
+#ifndef FONTOBJECT_H
+class FontObject;
+#endif
 
 class TextObject
 {
@@ -30,9 +32,9 @@ private:
 	float m_red, m_blue, m_green;
 	bool m_recreate;
 
-	friend class FontClass;
+	friend class FontObject;
 
-	void Recreate(GraphicsObject* graphics, FontClass* font);
+	void Recreate(GraphicsObject* graphics, FontObject* font);
 
 public:
 	TextObject(GraphicsObject* graphics, std::string text, float positionX, float positionY);
@@ -42,5 +44,7 @@ public:
 	void SetText(std::string text);
 	void SetPosition(float positionX, float positionY);
 };
+
+#include "fontobject.h"
 
 #endif

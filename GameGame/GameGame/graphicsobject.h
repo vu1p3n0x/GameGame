@@ -29,7 +29,6 @@ public:
 	~GraphicsObject();
 
 	D3DClass* GetD3D();
-
 	CameraClass* GetCamera();
 	FontShaderClass* GetFontShader();
 	TextureShaderClass* GetTextureShader();

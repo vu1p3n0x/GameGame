@@ -113,8 +113,16 @@ void ApplicationObject::Run()
 		if (msg.message == WM_QUIT)
 			return;
 
+		// rendering and update
+		m_graphics->GetD3D()->BeginScene(0.0f, 0.0f, 0.0f, 1.0f);
+		m_graphics->GetD3D()->TurnZBufferOff();
+		m_graphics->GetCamera()->Render();
+
 		if (!Update())
 			return;
+
+		m_graphics->GetD3D()->TurnZBufferOn();
+		m_graphics->GetD3D()->EndScene();
 	}
 }
 void ApplicationObject::ShutdownWindow()

@@ -20,6 +20,9 @@ TextObject::TextObject(GraphicsObject* graphics, std::string text, float positio
 	m_positionX = positionX;
 	m_positionY = positionY;
 	m_recreate = true;
+	m_red = 1.0f;
+	m_green = 1.0f;
+	m_blue = 1.0f;
 
 	m_vertexCount = 6 * text.length();
 	m_indexCount = 6 * text.length();
@@ -50,7 +53,7 @@ TextObject::TextObject(GraphicsObject* graphics, std::string text, float positio
 
 	result = graphics->GetD3D()->GetDevice()->CreateBuffer(&vertexBufferDesc, &vertexData, &m_vertexBuffer);
 	if (FAILED(result))
-		throw std::exception(strcat("Error Initializing Vertex Buffer in TextObject: ", text.c_str()));
+		throw std::exception("Error Initializing Vertex Buffer in TextObject");
 
 	indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
 	indexBufferDesc.ByteWidth = sizeof(unsigned long) * m_indexCount;
@@ -65,7 +68,7 @@ TextObject::TextObject(GraphicsObject* graphics, std::string text, float positio
 
 	result = graphics->GetD3D()->GetDevice()->CreateBuffer(&indexBufferDesc, &indexData, &m_indexBuffer);
 	if (FAILED(result))
-		throw std::exception(strcat("Error Initializing Index Buffer in TextObject: ", text.c_str()));
+		throw std::exception("Error Initializing Index Buffer in TextObject");
 
 	delete [] vertices;
 	vertices = NULL;
@@ -91,7 +94,7 @@ TextObject::~TextObject()
 	}
 }
 
-void TextObject::Recreate(GraphicsObject* graphics, FontClass* font)
+void TextObject::Recreate(GraphicsObject* graphics, FontObject* font)
 {
 	if (!m_recreate)
 		return;
@@ -113,14 +116,14 @@ void TextObject::Recreate(GraphicsObject* graphics, FontClass* font)
 	// create new vertices
 	vertices = new VertexType[m_vertexCount];
 	if (!vertices)
-		throw std::exception(strcat("Error recreating text object vertices: ", m_text.c_str()));
+		throw std::exception("Error recreating text object vertices");
 
 	memset(vertices, 0, sizeof(VertexType) * m_vertexCount);
 	font->BuildVertexArray((void*)vertices, m_text.c_str(), drawX, drawY);
 
 	result = graphics->GetD3D()->GetDeviceContext()->Map(m_vertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 	if (FAILED(result))
-		throw std::exception(strcat("Error recreating text object vertex mapping: ", m_text.c_str()));
+		throw std::exception("Error recreating text object vertex mapping");
 
 	verticesPtr = (VertexType*)mappedResource.pData;
 	memcpy(verticesPtr, (void*)vertices, sizeof(VertexType) * m_vertexCount);
@@ -129,17 +132,20 @@ void TextObject::Recreate(GraphicsObject* graphics, FontClass* font)
 	delete [] vertices;
 	vertices = NULL;
 
+	m_recreate = false;
+	return;
+
 	// create new indices
 	indices = new unsigned int[m_indexCount];
 	if (!indices)
-		throw std::exception(strcat("Error recreating text object indices: ", m_text.c_str()));
+		throw std::exception("Error recreating text object indices");
 
 	for (unsigned int i = 1; i < m_indexCount; i++)
 		indices[i] = i;
 
 	result = graphics->GetD3D()->GetDeviceContext()->Map(m_indexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 	if (FAILED(result))
-		throw std::exception(strcat("Error recreating text object indices mapping: ", m_text.c_str()));
+		throw std::exception("Error recreating text object indices mapping");
 
 	indicesPtr = (unsigned int*)mappedResource.pData;
 	memcpy(indicesPtr, (void*)indices, sizeof(unsigned int) * m_indexCount);
@@ -148,7 +154,6 @@ void TextObject::Recreate(GraphicsObject* graphics, FontClass* font)
 	delete [] indices;
 	indices = NULL;
 
-	m_recreate = false;
 }
 
 void TextObject::SetText(std::string text)
