@@ -66,6 +66,9 @@
     <ClCompile Include="myapplication.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="textobject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="systemclass.h">

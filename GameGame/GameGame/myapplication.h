@@ -6,9 +6,13 @@
 #define MYAPPLICATION_H
 
 #include "applicationobject.h"
+#include "textobject.h"
 
 class MyApplication : public ApplicationObject
 {
+private:
+	TextObject* mytextobject;
+
 public:
 	MyApplication(LPCWSTR name);
 

@@ -43,6 +43,16 @@ PRIMARY OBJECTS
 -Pistol		med power, med ammo, slow
 
 
+class GraphicsObject
+
+private:
+  FontShader;
+  TextureShader;
+  Camera;
+  ID3D11Device;
+  ID3D11DeviceContext;
+
+
 
 class Text
 

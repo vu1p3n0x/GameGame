@@ -5,32 +5,41 @@
 #ifndef TEXTOBJECT_H
 #define TEXTOBJECT_H
 
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <string>
+
+#include "graphicsobject.h"
 #include "fontclass.h"
-#include "fontshaderclass.h"
 
 class TextObject
 {
 private:
-	FontClass* m_font;
-	FontShaderClass* m_fontShader;
-	string m_text;
+	struct VertexType
+	{
+		D3DXVECTOR3 position;
+		D3DXVECTOR2 texture;
+	};
+
+	std::string m_text;
 	ID3D11Buffer* m_vertexBuffer;
 	ID3D11Buffer* m_indexBuffer;
 	int m_vertexCount;
 	int m_indexCount;
+	float m_positionX, m_positionY;
 	float m_red, m_blue, m_green;
+	bool m_recreate;
+
+	friend class FontClass;
+
+	void Recreate(GraphicsObject* graphics, FontClass* font);
 
 public:
-	TextObject();
+	TextObject(GraphicsObject* graphics, std::string text, float positionX, float positionY);
 	TextObject(const TextObject& textobject);
 	~TextObject();
 
-	bool Initialize(ID3D11Device* device, FontClass* font, string text, float positionX, float positionY);
-	bool Render();
-	void Shutdown();
-
-	void SetFont(FontClass* font);
-	void SetText(string text);
+	void SetText(std::string text);
 	void SetPosition(float positionX, float positionY);
 };
 

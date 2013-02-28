@@ -12,7 +12,7 @@
 
 class ApplicationObject
 {
-private:
+protected:
 	LPCWSTR   m_name;
 	HINSTANCE m_instance;
 	HWND      m_hwnd;

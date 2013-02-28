@@ -21,6 +21,7 @@ private:
 	CameraClass* m_camera;
 	TextureShaderClass* m_textureShader;
 	FontShaderClass* m_fontShader;
+	int m_screenWidth, m_screenHeight;
 
 public:
 	GraphicsObject(HWND hwnd, int width, int height, bool fullscreen);
@@ -28,9 +29,12 @@ public:
 	~GraphicsObject();
 
 	D3DClass* GetD3D();
+
 	CameraClass* GetCamera();
 	FontShaderClass* GetFontShader();
 	TextureShaderClass* GetTextureShader();
+	int GetScreenWidth();
+	int GetScreenHeight();
 };
 
 #endif;

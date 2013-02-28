@@ -7,6 +7,9 @@
 
 GraphicsObject::GraphicsObject(HWND hwnd, int width, int height, bool fullscreen)
 {
+	m_screenWidth = width;
+	m_screenHeight = height;
+
 	m_d3d = new D3DClass;
 	if (!m_d3d)
 		throw std::exception("Error Creating the Direct3D Object");
@@ -79,4 +82,12 @@ TextureShaderClass* GraphicsObject::GetTextureShader()
 FontShaderClass* GraphicsObject::GetFontShader()
 {
 	return m_fontShader;
+}
+int GraphicsObject::GetScreenWidth()
+{
+	return m_screenWidth;
+}
+int GraphicsObject::GetScreenHeight()
+{
+	return m_screenHeight;
 }
