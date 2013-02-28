@@ -14,6 +14,7 @@ class MyApplication : public ApplicationObject
 private:
 	FontObject* myfontobject;
 	TextObject* mytextobject;
+	float thing;
 
 public:
 	MyApplication(LPCWSTR name);
