@@ -5,7 +5,7 @@
 #ifndef TEXTOBJECT_H
 #define TEXTOBJECT_H
 
-#define _CRT_SECURE_NO_WARNINGS
+// #define _CRT_SECURE_NO_WARNINGS
 
 #include <string>
 
@@ -37,9 +37,12 @@ private:
 	void Recreate(GraphicsObject* graphics, FontObject* font);
 
 public:
-	TextObject(GraphicsObject* graphics, std::string text, float positionX, float positionY);
+	TextObject();
 	TextObject(const TextObject& textobject);
 	~TextObject();
+
+	bool Initialize(GraphicsObject* graphics, std::string text, float positionX, float positionY);
+	void Shutdown();
 
 	void SetText(std::string text);
 	void SetPosition(float positionX, float positionY);

@@ -26,6 +26,7 @@ protected:
 protected:
 	virtual bool Initialize();
 	virtual bool Update();
+	virtual void Shutdown();
 
 public:
 	ApplicationObject();

@@ -4,7 +4,22 @@
 
 #include "fontobject.h"
 
-FontObject::FontObject(ID3D11Device* device, char* fontFilename, WCHAR* textureFilename)
+FontObject::FontObject()
+{
+	m_font = NULL;
+	m_texture = NULL;
+}
+FontObject::FontObject(const FontObject& fontobject)
+{
+	m_font = NULL;
+	m_texture = NULL;
+}
+FontObject::~FontObject()
+{
+
+}
+
+bool FontObject::Initialize(ID3D11Device* device, char* fontFilename, WCHAR* textureFilename)
 {
 	// load font data
 	std::ifstream fin;
@@ -12,11 +27,13 @@ FontObject::FontObject(ID3D11Device* device, char* fontFilename, WCHAR* textureF
 
 	m_font = new FontType[95];
 	if (!m_font)
-		throw std::exception("Error creating font type");
+		// throw std::exception("Error creating font type");
+		return false;
 
 	fin.open(fontFilename);
 	if (fin.fail())
-		throw std::exception("Error: could not open font data file");
+		// throw std::exception("Error: could not open font data file");
+		return false;
 
 	for (int i = 0; i < 95; i++)
 	{
@@ -38,19 +55,50 @@ FontObject::FontObject(ID3D11Device* device, char* fontFilename, WCHAR* textureF
 	// load font texture
 	m_texture = new TextureClass;
 	if (!m_texture)
-		throw std::exception("Error creating font texture");
+		// throw std::exception("Error creating font texture");
+		return false;
 
 	if (!(m_texture->Initialize(device, textureFilename)))
-		throw std::exception("Error initializing font texture");
+		// throw std::exception("Error initializing font texture");
+		return false;
 
-
+	return true;
 }
-FontObject::FontObject(const FontObject& fontobject)
+void FontObject::RenderText(GraphicsObject* graphics, TextObject* textobject)
 {
-	m_font = NULL;
-	m_texture = NULL;
+	unsigned int stride, offset;
+	D3DXVECTOR4 pixelColor;
+	D3DXMATRIX worldMatrix, viewMatrix, orthoMatrix;
+
+	stride = sizeof(VertexType);
+	offset = 0;
+
+	textobject->Recreate(graphics, this);
+
+	graphics->GetD3D()->TurnOnAlphaBlending();
+
+	graphics->GetD3D()->GetDeviceContext()->IASetVertexBuffers(0, 1, &textobject->m_vertexBuffer, &stride, &offset);
+	graphics->GetD3D()->GetDeviceContext()->IASetIndexBuffer(textobject->m_indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+	graphics->GetD3D()->GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	graphics->GetD3D()->GetWorldMatrix(worldMatrix);
+	graphics->GetCamera()->GetViewMatrix(viewMatrix);
+	graphics->GetD3D()->GetOrthoMatrix(orthoMatrix);
+
+	pixelColor = D3DXVECTOR4(textobject->m_red, textobject->m_green, textobject->m_blue, 1.0f);
+
+	graphics->GetFontShader()->Render(
+		graphics->GetD3D()->GetDeviceContext(), 
+		textobject->m_indexCount,
+		worldMatrix,
+		viewMatrix,
+		orthoMatrix,
+		m_texture->GetTexture(),
+		pixelColor);
+	
+	graphics->GetD3D()->TurnOffAlphaBlending();
 }
-FontObject::~FontObject()
+void FontObject::Shutdown()
 {
 	if (m_font)
 	{
@@ -113,38 +161,4 @@ void FontObject::BuildVertexArray(void* vertices, const char* text, float positi
 			positionX = positionX + m_font[letter].size + 1.0f;
 		}
 	}
-}
-void FontObject::RenderText(GraphicsObject* graphics, TextObject* textobject)
-{
-	unsigned int stride, offset;
-	D3DXVECTOR4 pixelColor;
-	D3DXMATRIX worldMatrix, viewMatrix, orthoMatrix;
-
-	stride = sizeof(VertexType);
-	offset = 0;
-
-	textobject->Recreate(graphics, this);
-
-	graphics->GetD3D()->TurnOnAlphaBlending();
-
-	graphics->GetD3D()->GetDeviceContext()->IASetVertexBuffers(0, 1, &textobject->m_vertexBuffer, &stride, &offset);
-	graphics->GetD3D()->GetDeviceContext()->IASetIndexBuffer(textobject->m_indexBuffer, DXGI_FORMAT_R32_UINT, 0);
-	graphics->GetD3D()->GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	graphics->GetD3D()->GetWorldMatrix(worldMatrix);
-	graphics->GetCamera()->GetViewMatrix(viewMatrix);
-	graphics->GetD3D()->GetOrthoMatrix(orthoMatrix);
-
-	pixelColor = D3DXVECTOR4(textobject->m_red, textobject->m_green, textobject->m_blue, 1.0f);
-
-	graphics->GetFontShader()->Render(
-		graphics->GetD3D()->GetDeviceContext(), 
-		textobject->m_indexCount,
-		worldMatrix,
-		viewMatrix,
-		orthoMatrix,
-		m_texture->GetTexture(),
-		pixelColor);
-	
-	graphics->GetD3D()->TurnOffAlphaBlending();
 }

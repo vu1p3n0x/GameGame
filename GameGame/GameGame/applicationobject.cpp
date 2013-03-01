@@ -124,6 +124,8 @@ void ApplicationObject::Run()
 		m_graphics->GetD3D()->TurnZBufferOn();
 		m_graphics->GetD3D()->EndScene();
 	}
+
+	Shutdown();
 }
 void ApplicationObject::ShutdownWindow()
 {
@@ -191,6 +193,10 @@ bool ApplicationObject::Initialize()
 bool ApplicationObject::Update()
 {
 	return true;
+}
+void ApplicationObject::Shutdown()
+{
+
 }
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)

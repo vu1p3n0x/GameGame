@@ -21,6 +21,7 @@ public:
 
 	bool Initialize();
 	bool Update();
+	void Shutdown();
 };
 
 static MyApplication* AppObject = NULL;

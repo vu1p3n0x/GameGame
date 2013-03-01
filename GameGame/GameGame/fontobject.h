@@ -35,13 +35,16 @@ private:
 	TextureClass* m_texture;
 
 public:
-	FontObject(ID3D11Device* device, char* fontFilename, WCHAR* textureFilename);
+	FontObject();
 	FontObject(const FontObject& fontobject);
 	~FontObject();
 
+	bool Initialize(ID3D11Device* device, char* fontFilename, WCHAR* textureFilename);
+	void RenderText(GraphicsObject* graphics, TextObject* textobject);
+	void Shutdown();
+
 	ID3D11ShaderResourceView* GetTexture();
 	void BuildVertexArray(void* vertices, const char* text, float positionX, float positionY);
-	void RenderText(GraphicsObject* graphics, TextObject* textobject);
 };
 
 #include "textobject.h"
