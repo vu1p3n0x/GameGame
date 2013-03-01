@@ -11,6 +11,7 @@ MyApplication::MyApplication(LPCWSTR name)
 
 	mytextobject = new TextObject;
 	myfontobject = new FontObject;
+	mybitmapobject = new BitmapObject;
 }
 
 bool MyApplication::Initialize()
@@ -24,6 +25,9 @@ bool MyApplication::Initialize()
 	// set up text object
 	if (!mytextobject->Initialize(m_graphics, "Herp Derp", 10.0f, 10.0f))
 		return false;
+
+	if (!mybitmapobject->Initialize(m_graphics, L"../GameGame/data/seafloor.dds", 256, 256))
+		return false;
 	
 	return true;
 }
@@ -34,10 +38,14 @@ bool MyApplication::Update()
 	mytextobject->SetPosition(10.0f, thing);
 	myfontobject->RenderText(m_graphics, mytextobject);
 
+	if (!mybitmapobject->Render(m_graphics, 100, 100))
+		return false;
+
 	return true;
 }
 void MyApplication::Shutdown()
 {
 	myfontobject->Shutdown();
 	mytextobject->Shutdown();
+	mybitmapobject->Shutdown();
 }

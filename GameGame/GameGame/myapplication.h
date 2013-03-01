@@ -8,12 +8,15 @@
 #include "applicationobject.h"
 #include "fontobject.h"
 #include "textobject.h"
+#include "bitmapobject.h"
 
 class MyApplication : public ApplicationObject
 {
 private:
 	FontObject* myfontobject;
 	TextObject* mytextobject;
+	BitmapObject* mybitmapobject;
+
 	float thing;
 
 public:

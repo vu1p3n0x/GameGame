@@ -1,30 +1,30 @@
-// FILE: bitmapclass.cpp
+// FILE: BitmapObject.cpp
 // DATE: 2/24/13
 // DESC: implementation of a class to manage a 2D image
 
-#include "bitmapclass.h"
+#include "BitmapObject.h"
 
-BitmapClass::BitmapClass()
+BitmapObject::BitmapObject()
 {
 	m_vertexBuffer = NULL;
 	m_indexBuffer = NULL;
 	m_texture = NULL;
 }
-BitmapClass::BitmapClass(const BitmapClass&)
+BitmapObject::BitmapObject(const BitmapObject&)
 {
 	m_vertexBuffer = NULL;
 	m_indexBuffer = NULL;
 	m_texture = NULL;
 }
-BitmapClass::~BitmapClass()
+BitmapObject::~BitmapObject()
 {
 
 }
 
-bool BitmapClass::Initialize(ID3D11Device* device, int screenWidth, int screenHeight, WCHAR* textureFilename, int bitmapWidth, int bitmapHeight)
+bool BitmapObject::Initialize(GraphicsObject* graphics, WCHAR* textureFilename, int bitmapWidth, int bitmapHeight)
 {
-	m_screenWidth = screenWidth;
-	m_screenHeight = screenHeight;
+	m_screenWidth = graphics->GetScreenWidth();
+	m_screenHeight = graphics->GetScreenHeight();
 
 	m_bitmapWidth = bitmapWidth;
 	m_bitmapHeight = bitmapHeight;
@@ -32,39 +32,39 @@ bool BitmapClass::Initialize(ID3D11Device* device, int screenWidth, int screenHe
 	m_prevPosX = -1;
 	m_prevPosY = -1;
 
-	if (!InitializeBuffers(device))
+	if (!InitializeBuffers(graphics->GetD3D()->GetDevice()))
 		return false;
 
-	if (!LoadTexture(device, textureFilename))
+	if (!LoadTexture(graphics->GetD3D()->GetDevice(), textureFilename))
 		return false;
 
 	return true;
 }
-void BitmapClass::Shutdown()
+void BitmapObject::Shutdown()
 {
 	ReleaseTexture();
 	ShutdownBuffers();
 }
-bool BitmapClass::Render(ID3D11DeviceContext* deviceContext, int positionX, int positionY)
+bool BitmapObject::Render(GraphicsObject* graphics, int positionX, int positionY)
 {
-	if (!UpdateBuffers(deviceContext, positionX, positionY))
+	if (!UpdateBuffers(graphics->GetD3D()->GetDeviceContext(), positionX, positionY))
 		return false;
 
-	RenderBuffers(deviceContext);
+	RenderBuffers(graphics);
 
 	return true;
 }
 
-int BitmapClass::GetIndexCount()
+int BitmapObject::GetIndexCount()
 {
 	return m_indexCount;
 }
-ID3D11ShaderResourceView* BitmapClass::GetTexture()
+ID3D11ShaderResourceView* BitmapObject::GetTexture()
 {
 	return m_texture->GetTexture();
 }
 
-bool BitmapClass::InitializeBuffers(ID3D11Device* device)
+bool BitmapObject::InitializeBuffers(ID3D11Device* device)
 {
 	VertexType* vertices;
 	unsigned long* indices;
@@ -126,7 +126,7 @@ bool BitmapClass::InitializeBuffers(ID3D11Device* device)
 
 	return true;
 }
-void BitmapClass::ShutdownBuffers()
+void BitmapObject::ShutdownBuffers()
 {
 	if (m_indexBuffer)
 	{
@@ -140,7 +140,7 @@ void BitmapClass::ShutdownBuffers()
 		m_vertexBuffer = NULL;
 	}
 }
-bool BitmapClass::UpdateBuffers(ID3D11DeviceContext* deviceContext, int positionX, int positionY)
+bool BitmapObject::UpdateBuffers(ID3D11DeviceContext* deviceContext, int positionX, int positionY)
 {
 	float left, right, top, bottom;
 	VertexType* vertices;
@@ -194,20 +194,33 @@ bool BitmapClass::UpdateBuffers(ID3D11DeviceContext* deviceContext, int position
 
 	return true;
 }
-void BitmapClass::RenderBuffers(ID3D11DeviceContext* deviceContext)
+void BitmapObject::RenderBuffers(GraphicsObject* graphics)
 {
 	unsigned int stride;
 	unsigned int offset;
+	D3DXMATRIX worldMatrix, viewMatrix, orthoMatrix;
 
 	stride = sizeof(VertexType);
 	offset = 0;
 
-	deviceContext->IASetVertexBuffers(0, 1, &m_vertexBuffer, &stride, &offset);
-	deviceContext->IASetIndexBuffer(m_indexBuffer, DXGI_FORMAT_R32_UINT, 0);
-	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	graphics->GetD3D()->GetDeviceContext()->IASetVertexBuffers(0, 1, &m_vertexBuffer, &stride, &offset);
+	graphics->GetD3D()->GetDeviceContext()->IASetIndexBuffer(m_indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+	graphics->GetD3D()->GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	graphics->GetD3D()->GetWorldMatrix(worldMatrix);
+	graphics->GetCamera()->GetViewMatrix(viewMatrix);
+	graphics->GetD3D()->GetOrthoMatrix(orthoMatrix);
+
+	graphics->GetTextureShader()->Render(
+		graphics->GetD3D()->GetDeviceContext(),
+		m_indexCount, 
+		worldMatrix,
+		viewMatrix,
+		orthoMatrix,
+		m_texture->GetTexture());
 }
 
-bool BitmapClass::LoadTexture(ID3D11Device* device, WCHAR* filename)
+bool BitmapObject::LoadTexture(ID3D11Device* device, WCHAR* filename)
 {
 	m_texture = new TextureClass;
 	if (!m_texture)
@@ -218,7 +231,7 @@ bool BitmapClass::LoadTexture(ID3D11Device* device, WCHAR* filename)
 
 	return true;
 }
-void BitmapClass::ReleaseTexture()
+void BitmapObject::ReleaseTexture()
 {
 	if (m_texture)
 	{

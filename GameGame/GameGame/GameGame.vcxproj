@@ -12,7 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="applicationobject.cpp" />
-    <ClCompile Include="bitmapclass.cpp" />
+    <ClCompile Include="bitmapobject.cpp" />
     <ClCompile Include="cameraclass.cpp" />
     <ClCompile Include="colorshaderclass.cpp" />
     <ClCompile Include="d3dclass.cpp" />
@@ -28,7 +28,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="applicationobject.h" />
-    <ClInclude Include="bitmapclass.h" />
+    <ClInclude Include="bitmapobject.h" />
     <ClInclude Include="cameraclass.h" />
     <ClInclude Include="colorshaderclass.h" />
     <ClInclude Include="d3dclass.h" />
