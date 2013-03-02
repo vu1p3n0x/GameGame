@@ -9,12 +9,20 @@ BitmapObject::BitmapObject()
 	m_vertexBuffer = NULL;
 	m_indexBuffer = NULL;
 	m_texture = NULL;
+
+	m_scaleX = 1.0f;
+	m_scaleY = 1.0f;
+	m_rotation = 0.0f;
 }
 BitmapObject::BitmapObject(const BitmapObject&)
 {
 	m_vertexBuffer = NULL;
 	m_indexBuffer = NULL;
 	m_texture = NULL;
+	
+	m_scaleX = 1.0f;
+	m_scaleY = 1.0f;
+	m_rotation = 0.0f;
 }
 BitmapObject::~BitmapObject()
 {
@@ -29,8 +37,8 @@ bool BitmapObject::Initialize(GraphicsObject* graphics, WCHAR* textureFilename, 
 	m_bitmapWidth = bitmapWidth;
 	m_bitmapHeight = bitmapHeight;
 
-	m_prevPosX = -1;
-	m_prevPosY = -1;
+	m_positionX = -1;
+	m_positionY = -1;
 
 	if (!InitializeBuffers(graphics->GetD3D()->GetDevice()))
 		return false;
@@ -45,14 +53,34 @@ void BitmapObject::Shutdown()
 	ReleaseTexture();
 	ShutdownBuffers();
 }
-bool BitmapObject::Render(GraphicsObject* graphics, int positionX, int positionY)
+bool BitmapObject::Render(GraphicsObject* graphics)
 {
-	if (!UpdateBuffers(graphics->GetD3D()->GetDeviceContext(), positionX, positionY))
+	if (!UpdateBuffers(graphics->GetD3D()->GetDeviceContext()))
 		return false;
 
 	RenderBuffers(graphics);
 
 	return true;
+}
+
+void BitmapObject::SetPosition(int positionX, int positionY)
+{
+	m_positionX = positionX;
+	m_positionY = positionY;
+}
+void BitmapObject::SetScale(float scale)
+{
+	m_scaleX = scale;
+	m_scaleY = scale;
+}
+void BitmapObject::SetScale(float scaleX, float scaleY)
+{
+	m_scaleX = scaleX;
+	m_scaleY = scaleY;
+}
+void BitmapObject::SetRotation(float rotation)
+{
+	m_rotation = rotation;
 }
 
 int BitmapObject::GetIndexCount()
@@ -140,24 +168,18 @@ void BitmapObject::ShutdownBuffers()
 		m_vertexBuffer = NULL;
 	}
 }
-bool BitmapObject::UpdateBuffers(ID3D11DeviceContext* deviceContext, int positionX, int positionY)
+bool BitmapObject::UpdateBuffers(ID3D11DeviceContext* deviceContext)
 {
 	float left, right, top, bottom;
 	VertexType* vertices;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	VertexType* verticesPtr;
 	HRESULT result;
-	
-	if((positionX == m_prevPosX) && (positionY == m_prevPosY))
-		return true;
-	
-	m_prevPosX = positionX;
-	m_prevPosY = positionY;
 
-	left = (float)((m_screenWidth / 2) * -1) + (float)positionX;
-	right = left + (float)m_bitmapWidth;
-	top = (float)(m_screenHeight / 2) - (float)positionY;
-	bottom = top - (float)m_bitmapHeight;
+	left = (float)m_positionX;
+	right = left + (float)m_bitmapWidth * m_scaleX;
+	top = (float)m_positionY;
+	bottom = top - (float)m_bitmapHeight * m_scaleY;
 
 	vertices = new VertexType[m_vertexCount];
 	if (!vertices)

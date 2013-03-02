@@ -153,6 +153,7 @@ void ApplicationObject::ShutdownWindow()
 
 	DestroyWindow(m_hwnd);
 	m_hwnd = NULL;
+	ShowCursor(true);
 
 	UnregisterClass(m_name, m_instance);
 	m_instance = NULL;

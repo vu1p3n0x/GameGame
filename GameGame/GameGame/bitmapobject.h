@@ -18,8 +18,13 @@ public:
 	~BitmapObject();
 
 	bool Initialize(GraphicsObject* graphics, WCHAR* textureFilename, int bitmapWidth, int bitmapHeight);
-	bool Render(GraphicsObject* graphics, int positionX, int positionY);
+	bool Render(GraphicsObject* graphics);
 	void Shutdown();
+
+	void SetPosition(int positionX, int positionY);
+	void SetScale(float scale);
+	void SetScale(float scaleX, float scaleY);
+	void SetRotation(float rotation);
 
 	int GetIndexCount();
 	ID3D11ShaderResourceView* GetTexture();
@@ -33,7 +38,7 @@ private:
 
 	bool InitializeBuffers(ID3D11Device* device);
 	void ShutdownBuffers();
-	bool UpdateBuffers(ID3D11DeviceContext* deviceContext, int positionX, int positionY);
+	bool UpdateBuffers(ID3D11DeviceContext* deviceContext);
 	void RenderBuffers(GraphicsObject* graphics);
 
 	bool LoadTexture(ID3D11Device* device, WCHAR* filename);
@@ -45,7 +50,9 @@ private:
 
 	int m_screenWidth, m_screenHeight;
 	int m_bitmapWidth, m_bitmapHeight;
-	int m_prevPosX, m_prevPosY;
+
+	int m_positionX, m_positionY;
+	float m_scaleX, m_scaleY, m_rotation;
 };
 
 #endif

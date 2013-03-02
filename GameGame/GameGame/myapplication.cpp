@@ -31,20 +31,31 @@ bool MyApplication::Initialize()
 	
 	return true;
 }
+
 bool MyApplication::Update()
 {
 	int x, y;
+	RECT position;
+
+	ShowCursor(false);
+
+	GetWindowRect(m_hwnd, &position);
+	if (GetFocus() == m_hwnd)
+		SetCursorPos((position.right + position.left)/2, (position.bottom + position.top)/2);
 
 	m_input->GetMouseLocation(x, y);
 
 	mytextobject->SetPosition(x, y);
 	myfontobject->RenderText(m_graphics, mytextobject);
 
-	if (!mybitmapobject->Render(m_graphics, 100, 100))
+	mybitmapobject->SetPosition(100, 100);
+	mybitmapobject->SetScale(0.5f, 1.0f);
+	if (!mybitmapobject->Render(m_graphics))
 		return false;
 
 	return true;
 }
+
 void MyApplication::Shutdown()
 {
 	myfontobject->Shutdown();
