@@ -19,7 +19,7 @@
     <ClCompile Include="fontobject.cpp" />
     <ClCompile Include="fontshaderclass.cpp" />
     <ClCompile Include="graphicsobject.cpp" />
-    <ClCompile Include="inputclass.cpp" />
+    <ClCompile Include="inputobject.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="myapplication.cpp" />
     <ClCompile Include="textobject.cpp" />
@@ -35,7 +35,7 @@
     <ClInclude Include="fontobject.h" />
     <ClInclude Include="fontshaderclass.h" />
     <ClInclude Include="graphicsobject.h" />
-    <ClInclude Include="inputclass.h" />
+    <ClInclude Include="inputobject.h" />
     <ClInclude Include="myapplication.h" />
     <ClInclude Include="textobject.h" />
     <ClInclude Include="textureclass.h" />

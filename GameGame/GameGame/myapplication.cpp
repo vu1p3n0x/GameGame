@@ -33,9 +33,11 @@ bool MyApplication::Initialize()
 }
 bool MyApplication::Update()
 {
-	thing += 1.0f;
+	int x, y;
 
-	mytextobject->SetPosition(10.0f, thing);
+	m_input->GetMouseLocation(x, y);
+
+	mytextobject->SetPosition(x, y);
 	myfontobject->RenderText(m_graphics, mytextobject);
 
 	if (!mybitmapobject->Render(m_graphics, 100, 100))

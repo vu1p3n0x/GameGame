@@ -9,15 +9,25 @@ ApplicationObject::ApplicationObject()
 {
 	m_instance = GetModuleHandle(NULL);
 	m_name = L"Game";
+
+	m_graphics = NULL;
+	m_input = NULL;
 }
 ApplicationObject::ApplicationObject(LPCWSTR name)
 {
 	m_instance = GetModuleHandle(NULL);
 	m_name = name;
+	
+	m_graphics = NULL;
+	m_input = NULL;
 }
 ApplicationObject::ApplicationObject(const ApplicationObject& application)
 {
-
+	m_instance = GetModuleHandle(NULL);
+	m_name = L"Game";
+	
+	m_graphics = NULL;
+	m_input = NULL;
 }
 ApplicationObject::~ApplicationObject()
 {
@@ -91,6 +101,9 @@ void ApplicationObject::InitializeWindow(int width, int height, const bool& full
 	SetFocus(m_hwnd);
 
 	m_graphics = new GraphicsObject(m_hwnd, m_width, m_height, m_fullscreen);
+	
+	m_input = new InputObject();
+	m_input->Initialize(m_instance, m_hwnd, m_width, m_height);
 
 	return;
 }
@@ -111,6 +124,12 @@ void ApplicationObject::Run()
 		}
 
 		if (msg.message == WM_QUIT)
+			return;
+
+		if (!m_input->Update())
+			return;
+
+		if (m_input->IsEscapeKeyPressed())
 			return;
 
 		// rendering and update
@@ -139,6 +158,13 @@ void ApplicationObject::ShutdownWindow()
 	m_instance = NULL;
 
 	AppObject = NULL;
+
+	if (m_input)
+	{
+		m_input->Shutdown();
+		delete m_input;
+		m_input = NULL;
+	}
 }
 
 LPCWSTR ApplicationObject::GetName()

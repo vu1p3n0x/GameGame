@@ -9,6 +9,7 @@
 #include <windows.h>
 
 #include "graphicsobject.h"
+#include "inputobject.h"
 
 class ApplicationObject
 {
@@ -22,6 +23,7 @@ protected:
 	bool m_fullscreen;
 
 	GraphicsObject* m_graphics;
+	InputObject* m_input;
 
 protected:
 	virtual bool Initialize();

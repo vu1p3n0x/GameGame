@@ -18,9 +18,6 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="inputclass.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="d3dclass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -57,11 +54,11 @@
     <ClCompile Include="bitmapobject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="inputobject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="inputclass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="d3dclass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -96,6 +93,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="bitmapobject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="inputobject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
