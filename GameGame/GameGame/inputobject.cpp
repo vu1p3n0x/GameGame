@@ -165,9 +165,9 @@ void InputObject::ProcessInput()
 		m_mouseY = m_screenHeight;
 }
 
-bool InputObject::IsEscapeKeyPressed()
+bool InputObject::IsKeyPressed(unsigned long key)
 {
-	return m_keyboardState[DIK_ESCAPE] & 0x80;
+	return m_keyboardState[key] & 0x80;
 }
 void InputObject::GetMouseLocation(int& mouseX, int& mouseY)
 {

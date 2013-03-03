@@ -172,33 +172,22 @@ void BitmapObject::ShutdownBuffers()
 }
 bool BitmapObject::UpdateBuffers(ID3D11DeviceContext* deviceContext)
 {
-	float left, right, top, bottom;
 	VertexType* vertices;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	VertexType* verticesPtr;
 	HRESULT result;
+	
+	float topLeftX = 0.0f;
+	float topLeftY = 0.0f;
 
-	float topLeftX, topLeftY;
-	float topRightX, topRightY;
-	float bottomLeftX, bottomLeftY;
-	float bottomRightX, bottomRightY;
+	float topRightX = m_bitmapWidth * m_scaleX * sin(m_rotation + 1.57079632679f);
+	float topRightY = m_bitmapWidth * m_scaleX * cos(m_rotation + 1.57079632679f);
 
-	topLeftX = 0.0f;
-	topLeftY = 0.0f;
+	float bottomLeftX = m_bitmapHeight * m_scaleY * cos(m_rotation + 1.57079632679f) * -1;
+	float bottomLeftY = m_bitmapHeight * m_scaleY * sin(m_rotation + 1.57079632679f);
 
-	topRightX = m_bitmapWidth * m_scaleX * sin(m_rotation + 1.57079632679f);
-	topRightY = m_bitmapWidth * m_scaleX * cos(m_rotation + 1.57079632679f);
-
-	bottomLeftX = m_bitmapHeight * m_scaleY * cos(m_rotation + 1.57079632679f) * -1;
-	bottomLeftY = m_bitmapHeight * m_scaleY * sin(m_rotation + 1.57079632679f);
-
-	bottomRightX = topRightX + bottomLeftX;
-	bottomRightY = topRightY + bottomLeftY;
-
-	left = (float)m_positionX;
-	right = left + (float)m_bitmapWidth * m_scaleX;
-	top = (float)m_positionY;
-	bottom = top - (float)m_bitmapHeight * m_scaleY;
+	float bottomRightX = topRightX + bottomLeftX;
+	float bottomRightY = topRightY + bottomLeftY;
 
 	vertices = new VertexType[m_vertexCount];
 	if (!vertices)
@@ -221,24 +210,6 @@ bool BitmapObject::UpdateBuffers(ID3D11DeviceContext* deviceContext)
 
 	vertices[5].position = D3DXVECTOR3(bottomRightX + m_positionX - m_screenWidth/2, m_screenHeight/2 - (bottomRightY + m_positionY), 0.0f); // bottom-right
 	vertices[5].texture = D3DXVECTOR2(1.0f, 1.0f);
-
-	//vertices[0].position = D3DXVECTOR3(left, top, 0.0f); // top-left
-	//vertices[0].texture = D3DXVECTOR2(0.0f, 0.0f);
-
-	//vertices[1].position = D3DXVECTOR3(right, bottom, 0.0f); // bottom-right
-	//vertices[1].texture = D3DXVECTOR2(1.0f, 1.0f);
-
-	//vertices[2].position = D3DXVECTOR3(left, bottom, 0.0f); // bottom left
-	//vertices[2].texture = D3DXVECTOR2(0.0f, 1.0f);
-
-	//vertices[3].position = D3DXVECTOR3(left, top, 0.0f); // top-left
-	//vertices[3].texture = D3DXVECTOR2(0.0f, 0.0f);
-
-	//vertices[4].position = D3DXVECTOR3(right, top, 0.0f); // top-right
-	//vertices[4].texture = D3DXVECTOR2(1.0f, 0.0f);
-
-	//vertices[5].position = D3DXVECTOR3(right, bottom, 0.0f); // bottom-right
-	//vertices[5].texture = D3DXVECTOR2(1.0f, 1.0f);
 
 	result = deviceContext->Map(m_vertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 	if (FAILED(result))

@@ -38,7 +38,7 @@ public:
 	bool Update();
 	void Shutdown();
 
-	bool IsEscapeKeyPressed();
+	bool IsKeyPressed(unsigned long key);
 	void GetMouseLocation(int& positionX, int& positionY);
 };
 
