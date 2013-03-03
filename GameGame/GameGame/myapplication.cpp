@@ -16,7 +16,7 @@ MyApplication::MyApplication(LPCWSTR name)
 
 bool MyApplication::Initialize()
 {
-	thing = 10.0f;
+	thing = 0.0f;
 
 	// set up font
 	if (!myfontobject->Initialize(m_graphics->GetD3D()->GetDevice(), "../GameGame/data/fontdata.txt", L"../GameGame/data/font.dds"))
@@ -26,7 +26,7 @@ bool MyApplication::Initialize()
 	if (!mytextobject->Initialize(m_graphics, "Herp Derp", 10.0f, 10.0f))
 		return false;
 
-	if (!mybitmapobject->Initialize(m_graphics, L"../GameGame/data/seafloor.dds", 256, 256))
+	if (!mybitmapobject->Initialize(m_graphics, L"../GameGame/data/aim_icon.png", 150, 149))
 		return false;
 	
 	return true;
@@ -36,8 +36,9 @@ bool MyApplication::Update()
 {
 	int x, y;
 	RECT position;
-
 	ShowCursor(false);
+
+	thing += 0.1f;
 
 	GetWindowRect(m_hwnd, &position);
 	if (GetFocus() == m_hwnd)
@@ -45,11 +46,12 @@ bool MyApplication::Update()
 
 	m_input->GetMouseLocation(x, y);
 
-	mytextobject->SetPosition(x, y);
+	mytextobject->SetPosition(10, 10);
 	myfontobject->RenderText(m_graphics, mytextobject);
 
-	mybitmapobject->SetPosition(100, 100);
-	mybitmapobject->SetScale(0.5f, 1.0f);
+	mybitmapobject->SetPosition(x + 53.03*cos(thing), y + 53.03f*sin(thing));
+	mybitmapobject->SetScale(0.5f);
+	mybitmapobject->SetRotation(-1 * thing - 1.57079632679f - 0.78539816339f);
 	if (!mybitmapobject->Render(m_graphics))
 		return false;
 

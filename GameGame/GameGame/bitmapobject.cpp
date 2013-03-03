@@ -58,7 +58,9 @@ bool BitmapObject::Render(GraphicsObject* graphics)
 	if (!UpdateBuffers(graphics->GetD3D()->GetDeviceContext()))
 		return false;
 
+	graphics->GetD3D()->TurnOnAlphaBlending();
 	RenderBuffers(graphics);
+	graphics->GetD3D()->TurnOffAlphaBlending();
 
 	return true;
 }
@@ -176,6 +178,23 @@ bool BitmapObject::UpdateBuffers(ID3D11DeviceContext* deviceContext)
 	VertexType* verticesPtr;
 	HRESULT result;
 
+	float topLeftX, topLeftY;
+	float topRightX, topRightY;
+	float bottomLeftX, bottomLeftY;
+	float bottomRightX, bottomRightY;
+
+	topLeftX = 0.0f;
+	topLeftY = 0.0f;
+
+	topRightX = m_bitmapWidth * m_scaleX * sin(m_rotation + 1.57079632679f);
+	topRightY = m_bitmapWidth * m_scaleX * cos(m_rotation + 1.57079632679f);
+
+	bottomLeftX = m_bitmapHeight * m_scaleY * cos(m_rotation + 1.57079632679f) * -1;
+	bottomLeftY = m_bitmapHeight * m_scaleY * sin(m_rotation + 1.57079632679f);
+
+	bottomRightX = topRightX + bottomLeftX;
+	bottomRightY = topRightY + bottomLeftY;
+
 	left = (float)m_positionX;
 	right = left + (float)m_bitmapWidth * m_scaleX;
 	top = (float)m_positionY;
@@ -185,23 +204,41 @@ bool BitmapObject::UpdateBuffers(ID3D11DeviceContext* deviceContext)
 	if (!vertices)
 		return false;
 
-	vertices[0].position = D3DXVECTOR3(left, top, 0.0f);
+	vertices[0].position = D3DXVECTOR3(topLeftX + m_positionX - m_screenWidth/2, m_screenHeight/2 - (topLeftY + m_positionY), 0.0f); // top-left
 	vertices[0].texture = D3DXVECTOR2(0.0f, 0.0f);
 
-	vertices[1].position = D3DXVECTOR3(right, bottom, 0.0f);
+	vertices[1].position = D3DXVECTOR3(bottomRightX + m_positionX - m_screenWidth/2, m_screenHeight/2 - (bottomRightY + m_positionY), 0.0f); // bottom-right
 	vertices[1].texture = D3DXVECTOR2(1.0f, 1.0f);
 
-	vertices[2].position = D3DXVECTOR3(left, bottom, 0.0f);
+	vertices[2].position = D3DXVECTOR3(bottomLeftX + m_positionX - m_screenWidth/2, m_screenHeight/2 - (bottomLeftY + m_positionY), 0.0f); // bottom left
 	vertices[2].texture = D3DXVECTOR2(0.0f, 1.0f);
 
-	vertices[3].position = D3DXVECTOR3(left, top, 0.0f);
+	vertices[3].position = D3DXVECTOR3(topLeftX + m_positionX - m_screenWidth/2, m_screenHeight/2 - (topLeftY + m_positionY), 0.0f); // top-left
 	vertices[3].texture = D3DXVECTOR2(0.0f, 0.0f);
 
-	vertices[4].position = D3DXVECTOR3(right, top, 0.0f);
+	vertices[4].position = D3DXVECTOR3(topRightX + m_positionX - m_screenWidth/2, m_screenHeight/2 - (topRightY + m_positionY), 0.0f); // top-right
 	vertices[4].texture = D3DXVECTOR2(1.0f, 0.0f);
 
-	vertices[5].position = D3DXVECTOR3(right, bottom, 0.0f);
+	vertices[5].position = D3DXVECTOR3(bottomRightX + m_positionX - m_screenWidth/2, m_screenHeight/2 - (bottomRightY + m_positionY), 0.0f); // bottom-right
 	vertices[5].texture = D3DXVECTOR2(1.0f, 1.0f);
+
+	//vertices[0].position = D3DXVECTOR3(left, top, 0.0f); // top-left
+	//vertices[0].texture = D3DXVECTOR2(0.0f, 0.0f);
+
+	//vertices[1].position = D3DXVECTOR3(right, bottom, 0.0f); // bottom-right
+	//vertices[1].texture = D3DXVECTOR2(1.0f, 1.0f);
+
+	//vertices[2].position = D3DXVECTOR3(left, bottom, 0.0f); // bottom left
+	//vertices[2].texture = D3DXVECTOR2(0.0f, 1.0f);
+
+	//vertices[3].position = D3DXVECTOR3(left, top, 0.0f); // top-left
+	//vertices[3].texture = D3DXVECTOR2(0.0f, 0.0f);
+
+	//vertices[4].position = D3DXVECTOR3(right, top, 0.0f); // top-right
+	//vertices[4].texture = D3DXVECTOR2(1.0f, 0.0f);
+
+	//vertices[5].position = D3DXVECTOR3(right, bottom, 0.0f); // bottom-right
+	//vertices[5].texture = D3DXVECTOR2(1.0f, 1.0f);
 
 	result = deviceContext->Map(m_vertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 	if (FAILED(result))

@@ -46,8 +46,8 @@ bool InputObject::Initialize(HINSTANCE instance, HWND windowHandle, int screenWi
 	m_screenWidth = screenWidth;
 	m_screenHeight = screenHeight;
 
-	m_mouseX = 0;
-	m_mouseY = 0;
+	m_mouseX = screenWidth/2;
+	m_mouseY = screenHeight/2;
 
 	// create input device
 	result = DirectInput8Create(instance, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&m_directInput, NULL);
