@@ -49,6 +49,8 @@ bool InputObject::Initialize(HINSTANCE instance, HWND windowHandle, int screenWi
 	m_mouseX = screenWidth/2;
 	m_mouseY = screenHeight/2;
 
+	m_mouseEnabled = true;
+
 	// create input device
 	result = DirectInput8Create(instance, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&m_directInput, NULL);
 	if (FAILED(result))
@@ -86,13 +88,44 @@ bool InputObject::Initialize(HINSTANCE instance, HWND windowHandle, int screenWi
 }
 bool InputObject::Update()
 {
-	if (!ReadKeyboard())
-		return false;
+	HRESULT result;
 
-	if (!ReadMouse())
-		return false;
+	for (unsigned int i = 0; i < 256; i++)
+		m_prevKeyboardState[i] = m_keyboardState[i];
 
-	ProcessInput();
+	result = m_keyboard->GetDeviceState(sizeof(m_keyboardState), (LPVOID)&m_keyboardState);
+	if (FAILED(result))
+	{
+		if (result == DIERR_INPUTLOST || result == DIERR_NOTACQUIRED)
+			m_keyboard->Acquire();
+		else
+			return false;
+	}
+
+	result = m_mouse->GetDeviceState(sizeof(m_mouseState), (LPVOID)&m_mouseState);
+	if (FAILED(result))
+	{
+		if (result == DIERR_INPUTLOST || result == DIERR_NOTACQUIRED)
+			m_mouse->Acquire();
+		else
+			return false;
+	}
+
+	if (m_mouseEnabled)
+	{
+		m_mouseX += m_mouseState.lX;
+		m_mouseY += m_mouseState.lY;
+
+		if (m_mouseX < 0)  
+			m_mouseX = 0;
+		if (m_mouseY < 0)
+			m_mouseY = 0;
+
+		if (m_mouseX > m_screenWidth)
+			m_mouseX = m_screenWidth;
+		if (m_mouseY > m_screenHeight)
+			m_mouseY = m_screenHeight; 
+	}
 
 	return true;
 }
@@ -119,58 +152,35 @@ void InputObject::Shutdown()
 	}
 }
 
-bool InputObject::ReadKeyboard()
+bool InputObject::IsKeyTriggered(unsigned long key)
 {
-	HRESULT result;
-
-	result = m_keyboard->GetDeviceState(sizeof(m_keyboardState), (LPVOID)&m_keyboardState);
-	if (FAILED(result))
-	{
-		if (result == DIERR_INPUTLOST || result == DIERR_NOTACQUIRED)
-			m_keyboard->Acquire();
-		else
-			return false;
-	}
-
-	return true;
+	return IsKeyPressed(key) && !IsPrevKeyPressed(key);
 }
-bool InputObject::ReadMouse()
-{
-	HRESULT result;
-
-	result = m_mouse->GetDeviceState(sizeof(m_mouseState), (LPVOID)&m_mouseState);
-	if (FAILED(result))
-	{
-		if (result == DIERR_INPUTLOST || result == DIERR_NOTACQUIRED)
-			m_mouse->Acquire();
-		else
-			return false;
-	}
-
-	return true;
-}
-void InputObject::ProcessInput()
-{
-	m_mouseX += m_mouseState.lX;
-	m_mouseY += m_mouseState.lY;
-
-	if (m_mouseX < 0)  
-		m_mouseX = 0;
-	if (m_mouseY < 0)
-		m_mouseY = 0;
-	
-	if (m_mouseX > m_screenWidth)
-		m_mouseX = m_screenWidth;
-	if (m_mouseY > m_screenHeight)
-		m_mouseY = m_screenHeight;
-}
-
 bool InputObject::IsKeyPressed(unsigned long key)
 {
 	return m_keyboardState[key] & 0x80;
 }
+bool InputObject::IsKeyReleased(unsigned long key)
+{
+	return IsPrevKeyPressed(key) && !IsKeyPressed(key);
+}
+
 void InputObject::GetMouseLocation(int& mouseX, int& mouseY)
 {
 	mouseX = m_mouseX;
 	mouseY = m_mouseY;
+}
+
+void InputObject::EnableMouseUpdate()
+{
+	m_mouseEnabled = true;
+}
+void InputObject::DisableMouseUpdate()
+{
+	m_mouseEnabled = false;
+}
+
+bool InputObject::IsPrevKeyPressed(unsigned long key)
+{
+	return m_prevKeyboardState[key] & 0x80;
 }

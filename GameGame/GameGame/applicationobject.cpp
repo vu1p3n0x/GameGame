@@ -129,7 +129,7 @@ void ApplicationObject::Run()
 		if (!m_input->Update())
 			return;
 
-		if (m_input->IsKeyPressed(DIK_ESCAPE))
+		if (m_input->IsKeyPressed(DIK_LWIN))
 			return;
 
 		// rendering and update

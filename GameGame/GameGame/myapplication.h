@@ -18,6 +18,7 @@ private:
 	BitmapObject* mybitmapobject;
 
 	float thing;
+	bool focus;
 
 public:
 	MyApplication(LPCWSTR name);

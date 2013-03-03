@@ -20,14 +20,14 @@ private:
 	IDirectInputDevice8* m_mouse;
 
 	unsigned char m_keyboardState[256];
+	unsigned char m_prevKeyboardState[256];
 	DIMOUSESTATE m_mouseState;
+	bool m_mouseEnabled;
 	
 	int m_screenWidth, m_screenHeight;
 	int m_mouseX, m_mouseY;
 
-	bool ReadKeyboard();
-	bool ReadMouse();
-	void ProcessInput();
+	bool IsPrevKeyPressed(unsigned long key);
 
 public:
 	InputObject();
@@ -38,8 +38,14 @@ public:
 	bool Update();
 	void Shutdown();
 
+	bool IsKeyTriggered(unsigned long key);
 	bool IsKeyPressed(unsigned long key);
+	bool IsKeyReleased(unsigned long key);
+
 	void GetMouseLocation(int& positionX, int& positionY);
+
+	void EnableMouseUpdate();
+	void DisableMouseUpdate();
 };
 
 #endif
