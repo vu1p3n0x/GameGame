@@ -9,13 +9,22 @@
 #include "fontobject.h"
 #include "textobject.h"
 #include "bitmapobject.h"
+#include "bitmapobject2.h"
 
 class MyApplication : public ApplicationObject
 {
 private:
 	FontObject* myfontobject;
 	TextObject* mytextobject;
-	BitmapObject* mybitmapobject;
+
+	BitmapObject* Cursor;
+
+	BitmapObject* Player;
+	float playerPosX;
+	float playerPosY;
+	float playerVelY;
+
+	BitmapObject2* NewThing;
 
 	float thing;
 	bool focus;
