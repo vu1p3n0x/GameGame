@@ -1,5 +1,5 @@
 // FILE: applicationobject.h
-// DATE: 2/26/13
+// DATE: 3/6/13
 // DESC: declaration of the class to manage the application
 
 #ifndef APPLICATIONOBJECT_H
@@ -36,18 +36,14 @@ public:
 	ApplicationObject(const ApplicationObject& application);
 	~ApplicationObject();
 
-	void InitializeWindow(int width, int height, const bool& fullscreen);
-	void Run();
-	void ShutdownWindow();
+	void virtual InitializeWindow(int width, int height, const bool& fullscreen) sealed;
+	void virtual Run() sealed;
+	void virtual ShutdownWindow() sealed;
 
 	LPCWSTR GetName();
 	HINSTANCE GetInstance();
 
-	int GetWidth();
-	int GetHeight();
 	bool GetFullscreen();
-
-	GraphicsObject* GetGraphicsObject();
 
 	LRESULT CALLBACK MessageHandler(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 };

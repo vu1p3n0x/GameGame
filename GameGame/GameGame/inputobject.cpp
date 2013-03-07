@@ -1,5 +1,5 @@
 // FILE: inputobject.cpp
-// DATE: 3/1/13
+// DATE: 3/6/13
 // DESC: implementation of an object to manage external input
 
 #include "inputobject.h"
@@ -114,7 +114,7 @@ bool InputObject::Update()
 	if (m_mouseEnabled)
 	{
 		m_mouseX += m_mouseState.lX;
-		m_mouseY += m_mouseState.lY;
+		m_mouseY -= m_mouseState.lY;
 
 		if (m_mouseX < 0)  
 			m_mouseX = 0;

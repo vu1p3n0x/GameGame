@@ -1,160 +1,165 @@
 // FILE: BitmapObject.cpp
-// DATE: 2/24/13
+// DATE: 3/6/13
 // DESC: implementation of a class to manage a 2D image
 
-#include "BitmapObject.h"
+#include "bitmapobject.h"
 
 BitmapObject::BitmapObject()
 {
 	m_vertexBuffer = NULL;
 	m_indexBuffer = NULL;
 	m_texture = NULL;
-
-	m_scaleX = 1.0f;
-	m_scaleY = 1.0f;
-	m_rotation = 0.0f;
 }
 BitmapObject::BitmapObject(const BitmapObject&)
 {
 	m_vertexBuffer = NULL;
 	m_indexBuffer = NULL;
 	m_texture = NULL;
-	
-	m_scaleX = 1.0f;
-	m_scaleY = 1.0f;
-	m_rotation = 0.0f;
 }
 BitmapObject::~BitmapObject()
 {
 
 }
 
-bool BitmapObject::Initialize(GraphicsObject* graphics, WCHAR* textureFilename, int bitmapWidth, int bitmapHeight)
+void BitmapObject::Initialize(GraphicsObject* graphics, WCHAR* textureFilename, unsigned int bitmapWidth, unsigned int bitmapHeight)
 {
+	// get information from graphics card
+	if (graphics == NULL)
+		throw std::exception("Null pointer exception when initializing bitmap object: GraphicsObject");
 	m_screenWidth = graphics->GetScreenWidth();
 	m_screenHeight = graphics->GetScreenHeight();
 
+	// get bitmap width
+	if (bitmapWidth == 0)
+		throw std::exception("bitmap width must be greater than 0");
 	m_bitmapWidth = bitmapWidth;
+
+	// get bitmap height
+	if (bitmapHeight == 0)
+		throw std::exception("bitmap height must be greater than 0");
 	m_bitmapHeight = bitmapHeight;
 
-	m_positionX = -1;
-	m_positionY = -1;
+	// create buffers for bitmap object
+	InitializeBuffers(graphics->GetD3D()->GetDevice());
 
-	if (!InitializeBuffers(graphics->GetD3D()->GetDevice()))
-		return false;
+	// load texture into graphics memory
+	LoadTexture(graphics->GetD3D()->GetDevice(), textureFilename);
 
-	if (!LoadTexture(graphics->GetD3D()->GetDevice(), textureFilename))
-		return false;
-
-	return true;
+	// set default transformations
+	SetPosition(0.0f, 0.0f);
+	SetRotation(0.0f);
+	SetScale(1.0f);
+	SetOrigin(0.0f, 0.0f);
 }
 void BitmapObject::Shutdown()
 {
 	ReleaseTexture();
 	ShutdownBuffers();
 }
-bool BitmapObject::Render(GraphicsObject* graphics)
+void BitmapObject::Render(GraphicsObject* graphics)
 {
-	if (!UpdateBuffers(graphics->GetD3D()->GetDeviceContext()))
-		return false;
-
-	graphics->GetD3D()->TurnOnAlphaBlending();
 	RenderBuffers(graphics);
-	graphics->GetD3D()->TurnOffAlphaBlending();
-
-	return true;
 }
 
-void BitmapObject::SetPosition(int positionX, int positionY)
+void BitmapObject::SetPosition(float positionX, float positionY)
 {
-	m_positionX = positionX;
-	m_positionY = positionY;
+	D3DXMatrixTranslation(&m_position, positionX - m_screenWidth/2, positionY - m_screenHeight/2, 0.0f);
 }
 void BitmapObject::SetScale(float scale)
 {
-	m_scaleX = scale;
-	m_scaleY = scale;
+	if (scale < 0.0f)
+		throw std::range_error("Scale value must be positive");
+
+	D3DXMatrixScaling(&m_scale, scale * m_bitmapWidth, scale * m_bitmapHeight, 1.0f);
 }
 void BitmapObject::SetScale(float scaleX, float scaleY)
 {
-	m_scaleX = scaleX;
-	m_scaleY = scaleY;
+	if (scaleX < 0.0f || scaleY < 0.0f)
+		throw std::range_error("Scale value must be positive");
+
+	D3DXMatrixScaling(&m_scale, scaleX * m_bitmapWidth, scaleY * m_bitmapHeight, 1.0f);
 }
 void BitmapObject::SetRotation(float rotation)
 {
-	m_rotation = rotation;
+	D3DXMatrixRotationZ(&m_rotation, rotation);
+}
+void BitmapObject::SetOrigin(float offsetX, float offsetY)
+{
+	D3DXMatrixTranslation(&m_origin, -1*offsetX, -1*offsetY, 0.0f);
 }
 
-int BitmapObject::GetIndexCount()
+void BitmapObject::InitializeBuffers(ID3D11Device* device)
 {
-	return m_indexCount;
-}
-ID3D11ShaderResourceView* BitmapObject::GetTexture()
-{
-	return m_texture->GetTexture();
-}
-
-bool BitmapObject::InitializeBuffers(ID3D11Device* device)
-{
-	VertexType* vertices;
-	unsigned long* indices;
-	D3D11_BUFFER_DESC vertexBufferDesc, indexBufferDesc;
-	D3D11_SUBRESOURCE_DATA vertexData, indexData;
 	HRESULT result;
 
-	m_vertexCount = 6;
-	m_indexCount = 6;
-
-	vertices = new VertexType[m_vertexCount];
+	// vertex initialization // 
+	VertexType* vertices;
+	vertices = new VertexType[VERTEXCOUNT];
 	if (!vertices)
-		return false;
+		throw std::exception("Could not create vertex array for BitmapObject");
 
-	indices = new unsigned long[m_indexCount];
-	if (!indices)
-		return false;
-
-	memset(vertices, 0, sizeof(VertexType)*m_vertexCount);
-
-	for (int i = 0; i < m_indexCount; i++)
-		indices[i] = i;
-
+	D3D11_BUFFER_DESC vertexBufferDesc;
 	vertexBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-	vertexBufferDesc.ByteWidth = sizeof(VertexType) * m_vertexCount;
+	vertexBufferDesc.ByteWidth = sizeof(VertexType) * VERTEXCOUNT;
 	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	vertexBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	vertexBufferDesc.MiscFlags = 0;
 	vertexBufferDesc.StructureByteStride = 0;
 
+	vertices[0].position = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	vertices[0].texture = D3DXVECTOR2(0.0f, 1.0f);
+
+	vertices[1].position = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
+	vertices[1].texture = D3DXVECTOR2(0.0f, 0.0f);
+
+	vertices[2].position = D3DXVECTOR3(1.0f, 1.0f, 0.0f);
+	vertices[2].texture = D3DXVECTOR2(1.0f, 0.0f);
+
+	vertices[3].position = D3DXVECTOR3(1.0f, 0.0f, 0.0f);
+	vertices[3].texture = D3DXVECTOR2(1.0f, 1.0f);
+
+	D3D11_SUBRESOURCE_DATA vertexData;
 	vertexData.pSysMem = vertices;
 	vertexData.SysMemPitch = 0;
 	vertexData.SysMemSlicePitch = 0;
 
 	result = device->CreateBuffer(&vertexBufferDesc, &vertexData, &m_vertexBuffer);
 	if (FAILED(result))
-		return false;
+		throw std::exception("Could not create vertex buffer for BitmapObject");
+	delete [] vertices;
+	vertices = NULL;
 
+	// index initialization //
+	unsigned long* indices;
+	indices = new unsigned long[INDEXCOUNT];
+	if (!indices)
+		throw std::exception("Could not create index array for BitmapObject");
+	
+	D3D11_BUFFER_DESC indexBufferDesc;
 	indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	indexBufferDesc.ByteWidth = sizeof(unsigned long) * m_indexCount;
+	indexBufferDesc.ByteWidth = sizeof(unsigned long) * INDEXCOUNT;
 	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
 	indexBufferDesc.CPUAccessFlags = 0;
 	indexBufferDesc.MiscFlags = 0;
 	indexBufferDesc.StructureByteStride = 0;
-
+	
+	indices[0] = 1;
+	indices[1] = 3;
+	indices[2] = 0;
+	indices[3] = 1;
+	indices[4] = 2;
+	indices[5] = 3;
+	
+	D3D11_SUBRESOURCE_DATA indexData;
 	indexData.pSysMem = indices;
 	indexData.SysMemPitch = 0;
 	indexData.SysMemSlicePitch = 0;
 
 	result = device->CreateBuffer(&indexBufferDesc, &indexData, &m_indexBuffer);
 	if(FAILED(result))
-		return false;
-
-	delete [] vertices;
-	vertices = NULL;
-
+		throw std::exception("Could not create index buffer for BitmapObject");
 	delete [] indices;
 	indices = NULL;
-
-	return true;
 }
 void BitmapObject::ShutdownBuffers()
 {
@@ -169,60 +174,6 @@ void BitmapObject::ShutdownBuffers()
 		m_vertexBuffer->Release();
 		m_vertexBuffer = NULL;
 	}
-}
-bool BitmapObject::UpdateBuffers(ID3D11DeviceContext* deviceContext)
-{
-	VertexType* vertices;
-	D3D11_MAPPED_SUBRESOURCE mappedResource;
-	VertexType* verticesPtr;
-	HRESULT result;
-	
-	float topLeftX = 0.0f;
-	float topLeftY = 0.0f;
-
-	float topRightX = m_bitmapWidth * m_scaleX * sin(m_rotation + 1.57079632679f);
-	float topRightY = m_bitmapWidth * m_scaleX * cos(m_rotation + 1.57079632679f);
-
-	float bottomLeftX = m_bitmapHeight * m_scaleY * cos(m_rotation + 1.57079632679f) * -1;
-	float bottomLeftY = m_bitmapHeight * m_scaleY * sin(m_rotation + 1.57079632679f);
-
-	float bottomRightX = topRightX + bottomLeftX;
-	float bottomRightY = topRightY + bottomLeftY;
-
-	vertices = new VertexType[m_vertexCount];
-	if (!vertices)
-		return false;
-
-	vertices[0].position = D3DXVECTOR3(topLeftX + m_positionX - m_screenWidth/2, m_screenHeight/2 - (topLeftY + m_positionY), 0.0f); // top-left
-	vertices[0].texture = D3DXVECTOR2(0.0f, 0.0f);
-
-	vertices[1].position = D3DXVECTOR3(bottomRightX + m_positionX - m_screenWidth/2, m_screenHeight/2 - (bottomRightY + m_positionY), 0.0f); // bottom-right
-	vertices[1].texture = D3DXVECTOR2(1.0f, 1.0f);
-
-	vertices[2].position = D3DXVECTOR3(bottomLeftX + m_positionX - m_screenWidth/2, m_screenHeight/2 - (bottomLeftY + m_positionY), 0.0f); // bottom left
-	vertices[2].texture = D3DXVECTOR2(0.0f, 1.0f);
-
-	vertices[3].position = D3DXVECTOR3(topLeftX + m_positionX - m_screenWidth/2, m_screenHeight/2 - (topLeftY + m_positionY), 0.0f); // top-left
-	vertices[3].texture = D3DXVECTOR2(0.0f, 0.0f);
-
-	vertices[4].position = D3DXVECTOR3(topRightX + m_positionX - m_screenWidth/2, m_screenHeight/2 - (topRightY + m_positionY), 0.0f); // top-right
-	vertices[4].texture = D3DXVECTOR2(1.0f, 0.0f);
-
-	vertices[5].position = D3DXVECTOR3(bottomRightX + m_positionX - m_screenWidth/2, m_screenHeight/2 - (bottomRightY + m_positionY), 0.0f); // bottom-right
-	vertices[5].texture = D3DXVECTOR2(1.0f, 1.0f);
-
-	result = deviceContext->Map(m_vertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
-	if (FAILED(result))
-		return false;
-
-	verticesPtr = (VertexType*)mappedResource.pData;
-	memcpy(verticesPtr, (void*)vertices, sizeof(VertexType)*m_vertexCount);
-	deviceContext->Unmap(m_vertexBuffer, 0);
-
-	delete [] vertices;
-	vertices = NULL;
-
-	return true;
 }
 void BitmapObject::RenderBuffers(GraphicsObject* graphics)
 {
@@ -243,23 +194,21 @@ void BitmapObject::RenderBuffers(GraphicsObject* graphics)
 
 	graphics->GetTextureShader()->Render(
 		graphics->GetD3D()->GetDeviceContext(),
-		m_indexCount, 
-		worldMatrix,
+		INDEXCOUNT, 
+		m_origin * m_scale * m_rotation * m_position * worldMatrix,
 		viewMatrix,
 		orthoMatrix,
 		m_texture->GetTexture());
 }
 
-bool BitmapObject::LoadTexture(ID3D11Device* device, WCHAR* filename)
+void BitmapObject::LoadTexture(ID3D11Device* device, WCHAR* filename)
 {
 	m_texture = new TextureClass;
 	if (!m_texture)
-		return false;
+		throw std::exception("Could not create texture");
 
 	if (!(m_texture->Initialize(device, filename)))
-		return false;
-
-	return true;
+		throw std::exception("Could not initialize texture");
 }
 void BitmapObject::ReleaseTexture()
 {

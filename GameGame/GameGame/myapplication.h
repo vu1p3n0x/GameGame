@@ -1,5 +1,5 @@
 // FILE: myapplication.h
-// DATE: 2/26/13
+// DATE: 3/6/13
 // DESC: declaration of the user created base class
 
 #ifndef MYAPPLICATION_H
@@ -9,7 +9,6 @@
 #include "fontobject.h"
 #include "textobject.h"
 #include "bitmapobject.h"
-#include "bitmapobject2.h"
 
 class MyApplication : public ApplicationObject
 {
@@ -24,7 +23,7 @@ private:
 	float playerPosY;
 	float playerVelY;
 
-	BitmapObject2* NewThing;
+	BitmapObject* NewThing;
 
 	float thing;
 	bool focus;

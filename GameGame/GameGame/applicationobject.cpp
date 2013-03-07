@@ -1,5 +1,5 @@
 // FILE: applicationobject.cpp
-// DATE: 2/26/13
+// DATE: 3/6/13
 // DESC: implementation of the class to manage the application
 
 #include "applicationobject.h"
@@ -177,22 +177,9 @@ HINSTANCE ApplicationObject::GetInstance()
 	return m_instance;
 }
 
-int ApplicationObject::GetWidth()
-{
-	return m_width;
-}
-int ApplicationObject::GetHeight()
-{
-	return m_height;
-}
 bool ApplicationObject::GetFullscreen()
 {
 	return m_fullscreen;
-}
-
-GraphicsObject* ApplicationObject::GetGraphicsObject()
-{
-	return m_graphics;
 }
 
 LRESULT CALLBACK ApplicationObject::MessageHandler(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)

@@ -51,13 +51,10 @@
     <ClCompile Include="fontobject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="bitmapobject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="inputobject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="bitmapobject2.cpp">
+    <ClCompile Include="bitmapobject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -95,13 +92,10 @@
     <ClInclude Include="fontobject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="bitmapobject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="inputobject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="bitmapobject2.h">
+    <ClInclude Include="bitmapobject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

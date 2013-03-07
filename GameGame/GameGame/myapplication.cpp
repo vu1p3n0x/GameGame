@@ -1,5 +1,5 @@
 // FILE: myapplication.h
-// DATE: 2/26/13
+// DATE: 3/6/13
 // DESC: implementation of the user created base class
 
 #include "myapplication.h"
@@ -15,11 +15,13 @@ MyApplication::MyApplication(LPCWSTR name)
 	Cursor = new BitmapObject;
 	Player = new BitmapObject;
 
-	NewThing = new BitmapObject2;
+	NewThing = new BitmapObject;
 }
 
 bool MyApplication::Initialize()
 {
+	m_graphics->GetD3D()->TurnOnAlphaBlending();
+
 	thing = 0.0f;
 	focus = true;
 
@@ -35,16 +37,15 @@ bool MyApplication::Initialize()
 	if (!mytextobject->Initialize(m_graphics, "Herp Derp", 10.0f, 10.0f))
 		return false;
 
-	if (!Cursor->Initialize(m_graphics, L"../GameGame/data/target.png", 512, 512))
-		return false;
+	Cursor->Initialize(m_graphics, L"../GameGame/data/target.png", 512, 512);
+	Cursor->SetOrigin(0.5f, 0.5f);
 	Cursor->SetScale(0.125f);
 
-	if (!Player->Initialize(m_graphics, L"../GameGame/data/ball.png", 256, 256))
-		return false;
+	Player->Initialize(m_graphics, L"../GameGame/data/ball.png", 256, 256);
+	Player->SetOrigin(0.5f, 0.5f);
 	Player->SetScale(0.5);
 
-	if (!NewThing->Initialize(m_graphics, L"../GameGame/data/ball.png", 256, 256))
-		return false;
+	NewThing->Initialize(m_graphics, L"../GameGame/data/ball.png", 256, 256);
 	NewThing->SetPosition(400, 400);
 	NewThing->SetScale(0.5f);
 	NewThing->SetOrigin(0.5, 0.5f);
@@ -108,12 +109,11 @@ bool MyApplication::Update()
 	mytextobject->SetPosition(10, 10);
 	myfontobject->RenderText(m_graphics, mytextobject);
 
-	Cursor->SetPosition(x + 45.255f*cos(thing), y + 45.255f*sin(thing));
-	Cursor->SetRotation(-1 * thing - 1.57079632679f - 0.78539816339f);
-	if (!Cursor->Render(m_graphics))
-		return false;
+	Cursor->SetPosition(x, y);
+	Cursor->SetRotation(thing);
+	Cursor->Render(m_graphics);
 
-	Player->SetPosition(playerPosX + 64, m_graphics->GetScreenHeight() - (playerPosY + 128));
+	Player->SetPosition(playerPosX, playerPosY + 64);
 	Player->Render(m_graphics);
 	
 	NewThing->SetRotation(thing);
@@ -124,6 +124,8 @@ bool MyApplication::Update()
 
 void MyApplication::Shutdown()
 {
+	m_graphics->GetD3D()->TurnOffAlphaBlending();
+
 	myfontobject->Shutdown();
 	mytextobject->Shutdown();
 	Cursor->Shutdown();

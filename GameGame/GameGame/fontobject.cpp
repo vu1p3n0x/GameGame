@@ -75,8 +75,6 @@ void FontObject::RenderText(GraphicsObject* graphics, TextObject* textobject)
 
 	textobject->Recreate(graphics, this);
 
-	graphics->GetD3D()->TurnOnAlphaBlending();
-
 	graphics->GetD3D()->GetDeviceContext()->IASetVertexBuffers(0, 1, &textobject->m_vertexBuffer, &stride, &offset);
 	graphics->GetD3D()->GetDeviceContext()->IASetIndexBuffer(textobject->m_indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	graphics->GetD3D()->GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -95,8 +93,6 @@ void FontObject::RenderText(GraphicsObject* graphics, TextObject* textobject)
 		orthoMatrix,
 		m_texture->GetTexture(),
 		pixelColor);
-	
-	graphics->GetD3D()->TurnOffAlphaBlending();
 }
 void FontObject::Shutdown()
 {
