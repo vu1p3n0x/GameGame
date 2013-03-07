@@ -23,8 +23,6 @@ private:
 	float playerPosY;
 	float playerVelY;
 
-	BitmapObject* NewThing;
-
 	float thing;
 	bool focus;
 

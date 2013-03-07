@@ -14,8 +14,6 @@ MyApplication::MyApplication(LPCWSTR name)
 
 	Cursor = new BitmapObject;
 	Player = new BitmapObject;
-
-	NewThing = new BitmapObject;
 }
 
 bool MyApplication::Initialize()
@@ -44,11 +42,6 @@ bool MyApplication::Initialize()
 	Player->Initialize(m_graphics, L"../GameGame/data/ball.png", 256, 256);
 	Player->SetOrigin(0.5f, 0.5f);
 	Player->SetScale(0.5);
-
-	NewThing->Initialize(m_graphics, L"../GameGame/data/ball.png", 256, 256);
-	NewThing->SetPosition(400, 400);
-	NewThing->SetScale(0.5f);
-	NewThing->SetOrigin(0.5, 0.5f);
 
 	ShowCursor(false);
 	
@@ -115,9 +108,6 @@ bool MyApplication::Update()
 
 	Player->SetPosition(playerPosX, playerPosY + 64);
 	Player->Render(m_graphics);
-	
-	NewThing->SetRotation(thing);
-	NewThing->Render(m_graphics);
 
 	return true;
 }
