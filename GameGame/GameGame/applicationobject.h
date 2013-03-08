@@ -42,6 +42,7 @@ public:
 
 	LPCWSTR GetName();
 	HINSTANCE GetInstance();
+	HWND GetWindowHandle();
 
 	bool GetFullscreen();
 

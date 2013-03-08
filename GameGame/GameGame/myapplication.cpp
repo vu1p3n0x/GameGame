@@ -61,13 +61,13 @@ bool MyApplication::Update()
 		{
 			focus = false;
 			ShowCursor(true);
-			m_input->DisableMouseUpdate();
+			m_input->ReleaseMouse();
 		}
 		else
 		{
 			focus = true;
 			ShowCursor(false);
-			m_input->EnableMouseUpdate();
+			m_input->LockMouse();
 		}
 	}
 	

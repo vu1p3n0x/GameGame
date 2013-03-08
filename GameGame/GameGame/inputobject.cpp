@@ -3,6 +3,7 @@
 // DESC: implementation of an object to manage external input
 
 #include "inputobject.h"
+#include "myapplication.h"
 
 InputObject::InputObject()
 {
@@ -43,13 +44,15 @@ bool InputObject::Initialize(HINSTANCE instance, HWND windowHandle, int screenWi
 {
 	HRESULT result;
 
+	m_hwnd = windowHandle;
+
 	m_screenWidth = screenWidth;
 	m_screenHeight = screenHeight;
 
 	m_mouseX = screenWidth/2;
 	m_mouseY = screenHeight/2;
 
-	m_mouseEnabled = true;
+	m_mouseLocked = true;
 
 	// create input device
 	result = DirectInput8Create(instance, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&m_directInput, NULL);
@@ -111,21 +114,30 @@ bool InputObject::Update()
 			return false;
 	}
 
-	if (m_mouseEnabled)
+	m_mouseX += m_mouseState.lX;
+	m_mouseY -= m_mouseState.lY;
+
+	if (m_mouseX < 0)  
+		m_mouseX = 0;
+	if (m_mouseY < 0)
+		m_mouseY = 0;
+
+	if (m_mouseX > m_screenWidth)
+		m_mouseX = m_screenWidth;
+	if (m_mouseY > m_screenHeight)
+		m_mouseY = m_screenHeight; 
+
+	if (GetFocus() == m_hwnd)
 	{
-		m_mouseX += m_mouseState.lX;
-		m_mouseY -= m_mouseState.lY;
-
-		if (m_mouseX < 0)  
-			m_mouseX = 0;
-		if (m_mouseY < 0)
-			m_mouseY = 0;
-
-		if (m_mouseX > m_screenWidth)
-			m_mouseX = m_screenWidth;
-		if (m_mouseY > m_screenHeight)
-			m_mouseY = m_screenHeight; 
+		if (m_mouseLocked)
+		{
+			RECT position;
+			GetWindowRect(m_hwnd, &position);
+			SetCursorPos((position.right + position.left)/2, (position.bottom + position.top)/2);
+		}
 	}
+	else if (m_mouseLocked)
+		ReleaseMouse();
 
 	return true;
 }
@@ -171,13 +183,22 @@ void InputObject::GetMouseLocation(int& mouseX, int& mouseY)
 	mouseY = m_mouseY;
 }
 
-void InputObject::EnableMouseUpdate()
+void InputObject::LockMouse()
 {
-	m_mouseEnabled = true;
+	m_mouseLocked = true;
 }
-void InputObject::DisableMouseUpdate()
+void InputObject::ReleaseMouse()
 {
-	m_mouseEnabled = false;
+	POINT pos;
+	RECT rect;
+
+	GetCursorPos(&pos);
+	GetWindowRect(m_hwnd, &rect);
+
+	m_mouseX = pos.x - rect.left;
+	m_mouseY = pos.y - rect.top;
+
+	m_mouseLocked = false;
 }
 
 bool InputObject::IsPrevKeyPressed(unsigned long key)

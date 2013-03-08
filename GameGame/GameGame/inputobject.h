@@ -15,6 +15,8 @@
 class InputObject
 {
 private:
+	HWND m_hwnd;
+
 	IDirectInput8* m_directInput;
 	IDirectInputDevice8* m_keyboard;
 	IDirectInputDevice8* m_mouse;
@@ -22,7 +24,7 @@ private:
 	unsigned char m_keyboardState[256];
 	unsigned char m_prevKeyboardState[256];
 	DIMOUSESTATE m_mouseState;
-	bool m_mouseEnabled;
+	bool m_mouseLocked;
 	
 	int m_screenWidth, m_screenHeight;
 	int m_mouseX, m_mouseY;
@@ -44,8 +46,8 @@ public:
 
 	void GetMouseLocation(int& positionX, int& positionY);
 
-	void EnableMouseUpdate();
-	void DisableMouseUpdate();
+	void LockMouse();
+	void ReleaseMouse();
 };
 
 #endif

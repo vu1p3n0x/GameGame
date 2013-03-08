@@ -176,6 +176,10 @@ HINSTANCE ApplicationObject::GetInstance()
 {
 	return m_instance;
 }
+HWND ApplicationObject::GetWindowHandle()
+{
+	return m_hwnd;
+}
 
 bool ApplicationObject::GetFullscreen()
 {
