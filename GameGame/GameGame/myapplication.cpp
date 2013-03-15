@@ -42,8 +42,6 @@ bool MyApplication::Initialize()
 	Player->Initialize(m_graphics, L"../GameGame/data/ball.png", 256, 256);
 	Player->SetOrigin(0.5f, 0.5f);
 	Player->SetScale(0.5);
-
-	ShowCursor(false);
 	
 	return true;
 }
@@ -57,28 +55,24 @@ bool MyApplication::Update()
 
 	if(m_input->IsKeyTriggered(DIK_ESCAPE))
 	{
-		if (focus)
-		{
-			focus = false;
-			ShowCursor(true);
+		if (m_input->IsFocused())
 			m_input->ReleaseMouse();
-		}
 		else
-		{
-			focus = true;
-			ShowCursor(false);
 			m_input->LockMouse();
-		}
-	}
-	
-	if (focus)
-	{
-		GetWindowRect(m_hwnd, &position);
-		if (GetFocus() == m_hwnd)
-			SetCursorPos((position.right + position.left)/2, (position.bottom + position.top)/2);
 	}
 
 	playerVelY -= 1.0f;
+
+	if (m_input->IsKeyPressed(DIK_SPACE) && playerPosY == 0.0f)
+		playerVelY = 30.0f;
+	if (m_input->IsButtonPressed(0))
+		playerVelY = 0.0f;
+
+	if (m_input->IsKeyPressed(DIK_A))
+		playerPosX -= 5.0f;
+	if (m_input->IsKeyPressed(DIK_D))
+		playerPosX += 5.0f;
+
 	playerPosY += playerVelY;
 	
 	if (playerPosY < 0.0f)
@@ -86,16 +80,6 @@ bool MyApplication::Update()
 		playerPosY = 0.0f;
 		playerVelY = 0.0f;
 	}
-
-	if (m_input->IsKeyPressed(DIK_SPACE) && playerPosY == 0.0f)
-		playerVelY = 30.0f;
-
-	if (m_input->IsKeyPressed(DIK_A))
-		playerPosX -= 5.0f;
-	if (m_input->IsKeyPressed(DIK_D))
-		playerPosX += 5.0f;
-
-	
 
 	m_input->GetMouseLocation(x, y); 
 	

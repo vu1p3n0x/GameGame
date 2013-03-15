@@ -103,7 +103,8 @@ void ApplicationObject::InitializeWindow(int width, int height, const bool& full
 	m_graphics = new GraphicsObject(m_hwnd, m_width, m_height, m_fullscreen);
 	
 	m_input = new InputObject();
-	m_input->Initialize(m_instance, m_hwnd, m_width, m_height);
+	if (!m_input->Initialize(m_instance, m_hwnd, m_width, m_height))
+		MessageBox(m_hwnd, L"HEY SOMETHING WENT WRONG", L"ERROR OR SOMETHING", 0);
 
 	return;
 }

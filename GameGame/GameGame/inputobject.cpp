@@ -53,6 +53,7 @@ bool InputObject::Initialize(HINSTANCE instance, HWND windowHandle, int screenWi
 	m_mouseY = screenHeight/2;
 
 	m_mouseLocked = true;
+	ShowCursor(false);
 
 	// create input device
 	result = DirectInput8Create(instance, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&m_directInput, NULL);
@@ -93,17 +94,9 @@ bool InputObject::Update()
 {
 	HRESULT result;
 
+	m_prevMouseState = m_mouseState;
 	for (unsigned int i = 0; i < 256; i++)
 		m_prevKeyboardState[i] = m_keyboardState[i];
-
-	result = m_keyboard->GetDeviceState(sizeof(m_keyboardState), (LPVOID)&m_keyboardState);
-	if (FAILED(result))
-	{
-		if (result == DIERR_INPUTLOST || result == DIERR_NOTACQUIRED)
-			m_keyboard->Acquire();
-		else
-			return false;
-	}
 
 	result = m_mouse->GetDeviceState(sizeof(m_mouseState), (LPVOID)&m_mouseState);
 	if (FAILED(result))
@@ -114,23 +107,33 @@ bool InputObject::Update()
 			return false;
 	}
 
-	m_mouseX += m_mouseState.lX;
-	m_mouseY -= m_mouseState.lY;
-
-	if (m_mouseX < 0)  
-		m_mouseX = 0;
-	if (m_mouseY < 0)
-		m_mouseY = 0;
-
-	if (m_mouseX > m_screenWidth)
-		m_mouseX = m_screenWidth;
-	if (m_mouseY > m_screenHeight)
-		m_mouseY = m_screenHeight; 
+	result = m_keyboard->GetDeviceState(sizeof(m_keyboardState), (LPVOID)&m_keyboardState);
+	if (FAILED(result))
+	{
+		if (result == DIERR_INPUTLOST || result == DIERR_NOTACQUIRED)
+			m_keyboard->Acquire();
+		else
+			return false;
+	}
 
 	if (GetFocus() == m_hwnd)
 	{
 		if (m_mouseLocked)
 		{
+
+			m_mouseX += m_mouseState.lX;
+			m_mouseY -= m_mouseState.lY;
+
+			if (m_mouseX < 0)  
+				m_mouseX = 0;
+			if (m_mouseY < 0)
+				m_mouseY = 0;
+
+			if (m_mouseX > m_screenWidth)
+				m_mouseX = m_screenWidth;
+			if (m_mouseY > m_screenHeight)
+				m_mouseY = m_screenHeight; 
+
 			RECT position;
 			GetWindowRect(m_hwnd, &position);
 			SetCursorPos((position.right + position.left)/2, (position.bottom + position.top)/2);
@@ -164,17 +167,29 @@ void InputObject::Shutdown()
 	}
 }
 
-bool InputObject::IsKeyTriggered(unsigned long key)
+bool InputObject::IsKeyTriggered(unsigned int key)
 {
-	return IsKeyPressed(key) && !IsPrevKeyPressed(key);
+	if (key >= INPUTOBJECT_KEYBOARD_MAX)
+		throw std::exception("Keyboard key index out of bounds");
+	if (IsFocused())
+		return (IsKeyPressed(key) && !IsPrevKeyPressed(key)) != 0;
+	return false;
 }
-bool InputObject::IsKeyPressed(unsigned long key)
+bool InputObject::IsKeyPressed(unsigned int key)
 {
-	return m_keyboardState[key] & 0x80;
+	if (key >= INPUTOBJECT_KEYBOARD_MAX)
+		throw std::exception("Keyboard key index out of bounds");
+	if (IsFocused())
+		return (m_keyboardState[key] & 0x80) != 0;
+	return false;
 }
-bool InputObject::IsKeyReleased(unsigned long key)
+bool InputObject::IsKeyReleased(unsigned int key)
 {
-	return IsPrevKeyPressed(key) && !IsKeyPressed(key);
+	if (key >= INPUTOBJECT_KEYBOARD_MAX)
+		throw std::exception("Keyboard key index out of bounds");
+	if (IsFocused())
+		return (IsPrevKeyPressed(key) && !IsKeyPressed(key)) != 0;
+	return false;
 }
 
 void InputObject::GetMouseLocation(int& mouseX, int& mouseY)
@@ -182,26 +197,58 @@ void InputObject::GetMouseLocation(int& mouseX, int& mouseY)
 	mouseX = m_mouseX;
 	mouseY = m_mouseY;
 }
+bool InputObject::IsFocused()
+{
+	return m_mouseLocked;
+}
+
+bool InputObject::IsButtonTriggered(unsigned int button)
+{
+	if (button >= INPUTOBJECT_MOUSE_MAX)
+		throw std::exception("Mouse button index out of bounds");
+	if (IsFocused())
+		return (IsButtonPressed(button) && !IsPrevButtonPressed(button)) != 0;
+	return false;
+}
+bool InputObject::IsButtonPressed(unsigned int button)
+{
+	if (button >= INPUTOBJECT_MOUSE_MAX)
+		throw std::exception("Mouse button index out of bounds");
+	if (IsFocused())
+		return (m_mouseState.rgbButtons[button] & 0x80) != 0;
+	return false;
+}
+bool InputObject::IsButtonReleased(unsigned int button)
+{
+	if (button >= INPUTOBJECT_MOUSE_MAX)
+		throw std::exception("Mouse button index out of bounds");
+	if (IsFocused())
+		return (IsPrevButtonPressed(button) && !IsButtonPressed(button)) != 0;
+	return false;
+}
 
 void InputObject::LockMouse()
 {
-	m_mouseLocked = true;
+	if (!m_mouseLocked)
+	{
+		m_mouseLocked = true;
+		ShowCursor(false);
+	}
 }
 void InputObject::ReleaseMouse()
 {
-	POINT pos;
-	RECT rect;
-
-	GetCursorPos(&pos);
-	GetWindowRect(m_hwnd, &rect);
-
-	m_mouseX = pos.x - rect.left;
-	m_mouseY = pos.y - rect.top;
-
-	m_mouseLocked = false;
+	if (m_mouseLocked)
+	{
+		ShowCursor(true);
+		m_mouseLocked = false; 
+	}
 }
 
-bool InputObject::IsPrevKeyPressed(unsigned long key)
+bool InputObject::IsPrevKeyPressed(unsigned int key)
 {
-	return m_prevKeyboardState[key] & 0x80;
+	return (m_prevKeyboardState[key] & 0x80) != 0;
+}
+bool InputObject::IsPrevButtonPressed(unsigned int button)
+{
+	return (m_prevMouseState.rgbButtons[button] & 0x80) != 0;
 }

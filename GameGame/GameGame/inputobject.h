@@ -7,6 +7,9 @@
 
 #define DIRECTINPUT_VERSION 0x0800
 
+#define INPUTOBJECT_KEYBOARD_MAX 256
+#define INPUTOBJECT_MOUSE_MAX 4
+
 #pragma comment(lib, "dinput8.lib")
 #pragma comment(lib, "dxguid.lib")
 
@@ -16,20 +19,24 @@ class InputObject
 {
 private:
 	HWND m_hwnd;
+	int m_screenWidth;
+	int m_screenHeight;
 
 	IDirectInput8* m_directInput;
-	IDirectInputDevice8* m_keyboard;
-	IDirectInputDevice8* m_mouse;
 
+	IDirectInputDevice8* m_keyboard;
 	unsigned char m_keyboardState[256];
 	unsigned char m_prevKeyboardState[256];
-	DIMOUSESTATE m_mouseState;
-	bool m_mouseLocked;
-	
-	int m_screenWidth, m_screenHeight;
-	int m_mouseX, m_mouseY;
 
-	bool IsPrevKeyPressed(unsigned long key);
+	IDirectInputDevice8* m_mouse;
+	DIMOUSESTATE m_mouseState;
+	DIMOUSESTATE m_prevMouseState;
+	bool m_mouseLocked;
+	int m_mouseX;
+	int m_mouseY;
+
+	bool IsPrevKeyPressed(unsigned int key);
+	bool IsPrevButtonPressed(unsigned int button);
 
 public:
 	InputObject();
@@ -40,12 +47,17 @@ public:
 	bool Update();
 	void Shutdown();
 
-	bool IsKeyTriggered(unsigned long key);
-	bool IsKeyPressed(unsigned long key);
-	bool IsKeyReleased(unsigned long key);
+	bool IsKeyTriggered(unsigned int key);
+	bool IsKeyPressed(unsigned int key);
+	bool IsKeyReleased(unsigned int key);
 
 	void GetMouseLocation(int& positionX, int& positionY);
+	
+	bool IsButtonTriggered(unsigned int button);
+	bool IsButtonPressed(unsigned int button);
+	bool IsButtonReleased(unsigned int button);
 
+	bool IsFocused();
 	void LockMouse();
 	void ReleaseMouse();
 };
