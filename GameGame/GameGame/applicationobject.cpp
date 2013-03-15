@@ -113,8 +113,15 @@ void ApplicationObject::Run()
 	MSG msg;
 	ZeroMemory(&msg, sizeof(MSG));
 
-	if (!Initialize())
-		return;
+	// initialization
+	try { if (!Initialize()) throw std::exception("Unknown error occured during initialization"); }
+	catch (std::exception e)
+	{
+		ShowCursor(true);
+		int result = MessageBoxA(m_hwnd, e.what(), "Error during initialization", MB_RETRYCANCEL | MB_ICONERROR | MB_DEFBUTTON2);
+		if (result != IDRETRY)
+			return;
+	}
 
 	while (true)
 	{
@@ -127,21 +134,33 @@ void ApplicationObject::Run()
 		if (msg.message == WM_QUIT)
 			return;
 
-		if (!m_input->Update())
-			return;
+		// update
+		try { if (!m_input->Update()) throw std::exception("Unknown error occured during input update");
+			  if (!Update())          throw std::exception("Unknown error occured during frame update"); }
+		catch (std::exception e)
+		{
+			ShowCursor(true);
+			int result = MessageBoxA(m_hwnd, e.what(), "Error during frame update", MB_RETRYCANCEL | MB_ICONERROR | MB_DEFBUTTON2);
+			if (result != IDRETRY)
+				return;
+		}
 
 		if (m_input->IsKeyPressed(DIK_LWIN))
 			m_input->ReleaseMouse();
 
-		// rendering and update
+		// rendering
 		m_graphics->GetD3D()->BeginScene(0.0f, 0.0f, 0.0f, 1.0f);
-		m_graphics->GetD3D()->TurnZBufferOff();
 		m_graphics->GetCamera()->Render();
 
-		if (!Update())
-			return;
+		try { if (!Draw()) throw std::exception("Unknown error occured during frame draw"); }
+		catch (std::exception e)
+		{
+			ShowCursor(true);
+			int result = MessageBoxA(m_hwnd, e.what(), "Error during frame draw", MB_RETRYCANCEL | MB_ICONERROR | MB_DEFBUTTON2);
+			if (result != IDRETRY)
+				return;
+		}
 
-		m_graphics->GetD3D()->TurnZBufferOn();
 		m_graphics->GetD3D()->EndScene();
 	}
 
@@ -210,6 +229,10 @@ bool ApplicationObject::Initialize()
 	return true;
 }
 bool ApplicationObject::Update()
+{
+	return true;
+}
+bool ApplicationObject::Draw()
 {
 	return true;
 }

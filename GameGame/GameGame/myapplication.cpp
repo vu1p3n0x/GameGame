@@ -19,6 +19,7 @@ MyApplication::MyApplication(LPCWSTR name)
 bool MyApplication::Initialize()
 {
 	m_graphics->GetD3D()->TurnOnAlphaBlending();
+	m_graphics->GetD3D()->TurnZBufferOff();
 
 	thing = 0.0f;
 	focus = true;
@@ -30,6 +31,7 @@ bool MyApplication::Initialize()
 	// set up font
 	if (!myfontobject->Initialize(m_graphics->GetD3D()->GetDevice(), "../GameGame/data/fontdata.txt", L"../GameGame/data/font.dds"))
 		return false;
+	mytextobject->SetPosition(10, 10);
 
 	// set up text object
 	if (!mytextobject->Initialize(m_graphics, "Herp Derp", 10.0f, 10.0f))
@@ -69,7 +71,9 @@ bool MyApplication::Update()
 			playerVelY = 30.0f;
 		if (m_input->IsButtonPressed(0))
 			playerVelY = 0.0f;
-
+		if (m_input->IsButtonPressed(1))
+			throw std::exception("lol something happened");
+		
 		if (m_input->IsKeyPressed(DIK_A))
 			playerPosX -= 5.0f;
 		if (m_input->IsKeyPressed(DIK_D))
@@ -86,24 +90,31 @@ bool MyApplication::Update()
 
 	m_input->GetMouseLocation(x, y); 
 	
-	mytextobject->SetPosition(10, 10);
-	myfontobject->RenderText(m_graphics, mytextobject);
-
 	Cursor->SetPosition(x, y);
 	Cursor->SetRotation(thing);
-	Cursor->Render(m_graphics);
 
 	Player->SetPosition(playerPosX, playerPosY + 64);
 	Player->Render(m_graphics);
 
 	return true;
 }
+bool MyApplication::Draw()
+{
+	myfontobject->RenderText(m_graphics, mytextobject);
+
+	Cursor->Render(m_graphics);
+	Player->Render(m_graphics);
+	
+	return true;
+}
 
 void MyApplication::Shutdown()
 {
+	m_graphics->GetD3D()->TurnZBufferOn();
 	m_graphics->GetD3D()->TurnOffAlphaBlending();
 
 	myfontobject->Shutdown();
 	mytextobject->Shutdown();
 	Cursor->Shutdown();
+	Player->Shutdown();
 }

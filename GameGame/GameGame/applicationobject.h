@@ -28,6 +28,7 @@ protected:
 protected:
 	virtual bool Initialize();
 	virtual bool Update();
+	virtual bool Draw();
 	virtual void Shutdown();
 
 public:

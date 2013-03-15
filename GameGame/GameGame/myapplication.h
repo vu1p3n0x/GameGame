@@ -31,6 +31,7 @@ public:
 
 	bool Initialize();
 	bool Update();
+	bool Draw();
 	void Shutdown();
 };
 
