@@ -63,15 +63,18 @@ bool MyApplication::Update()
 
 	playerVelY -= 1.0f;
 
-	if (m_input->IsKeyPressed(DIK_SPACE) && playerPosY == 0.0f)
-		playerVelY = 30.0f;
-	if (m_input->IsButtonPressed(0))
-		playerVelY = 0.0f;
+	if (m_input->IsFocused())
+	{
+		if (m_input->IsKeyPressed(DIK_SPACE) && playerPosY == 0.0f)
+			playerVelY = 30.0f;
+		if (m_input->IsButtonPressed(0))
+			playerVelY = 0.0f;
 
-	if (m_input->IsKeyPressed(DIK_A))
-		playerPosX -= 5.0f;
-	if (m_input->IsKeyPressed(DIK_D))
-		playerPosX += 5.0f;
+		if (m_input->IsKeyPressed(DIK_A))
+			playerPosX -= 5.0f;
+		if (m_input->IsKeyPressed(DIK_D))
+			playerPosX += 5.0f; 
+	}
 
 	playerPosY += playerVelY;
 	

@@ -131,7 +131,7 @@ void ApplicationObject::Run()
 			return;
 
 		if (m_input->IsKeyPressed(DIK_LWIN))
-			return;
+			m_input->ReleaseMouse();
 
 		// rendering and update
 		m_graphics->GetD3D()->BeginScene(0.0f, 0.0f, 0.0f, 1.0f);

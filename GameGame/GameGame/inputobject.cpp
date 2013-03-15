@@ -58,35 +58,35 @@ bool InputObject::Initialize(HINSTANCE instance, HWND windowHandle, int screenWi
 	// create input device
 	result = DirectInput8Create(instance, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&m_directInput, NULL);
 	if (FAILED(result))
-		return false;
+		throw std::exception("Failed to create the DirectInput object");
 
 	// keyboard
 	result = m_directInput->CreateDevice(GUID_SysKeyboard, &m_keyboard, NULL);
 	if (FAILED(result))
-		return false;
+		throw std::exception("Failed to create the keyboard device");
 	result = m_keyboard->SetDataFormat(&c_dfDIKeyboard);
 	if (FAILED(result))
-		return false;
+		throw std::exception("Failed to set the keyboard data format");
 	result = m_keyboard->SetCooperativeLevel(windowHandle, DISCL_FOREGROUND | DISCL_EXCLUSIVE);
 	if (FAILED(result))
-		return false;
+		throw std::exception("Failed to set the keyboard cooperative level");
 	result = m_keyboard->Acquire();
 	if (FAILED(result))
-		return false;
+		throw std::exception("Failed to acquire the keyboard");
 
 	// mouse
 	result = m_directInput->CreateDevice(GUID_SysMouse, &m_mouse, NULL);
 	if (FAILED(result))
-		return false;
+		throw std::exception("Failed to create the mouse device");
 	result = m_mouse->SetDataFormat(&c_dfDIMouse);
 	if (FAILED(result))
-		return false;
+		throw std::exception("Failed to set the mouse data format");
 	result = m_mouse->SetCooperativeLevel(windowHandle, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE);
 	if (FAILED(result))
-		return false;
+		throw std::exception("Failed to set the mouse cooperative level");
 	result = m_mouse->Acquire();
 	if (FAILED(result))
-		return false;
+		throw std::exception("Failed to acquire the mouse");
 
 	return true;
 }
@@ -104,7 +104,7 @@ bool InputObject::Update()
 		if (result == DIERR_INPUTLOST || result == DIERR_NOTACQUIRED)
 			m_mouse->Acquire();
 		else
-			return false;
+			throw std::exception("Failed to get the mouse state");
 	}
 
 	result = m_keyboard->GetDeviceState(sizeof(m_keyboardState), (LPVOID)&m_keyboardState);
@@ -113,14 +113,13 @@ bool InputObject::Update()
 		if (result == DIERR_INPUTLOST || result == DIERR_NOTACQUIRED)
 			m_keyboard->Acquire();
 		else
-			return false;
+			throw std::exception("Failed to get the keyboard state");
 	}
 
 	if (GetFocus() == m_hwnd)
 	{
 		if (m_mouseLocked)
 		{
-
 			m_mouseX += m_mouseState.lX;
 			m_mouseY -= m_mouseState.lY;
 
@@ -171,7 +170,7 @@ bool InputObject::IsKeyTriggered(unsigned int key)
 {
 	if (key >= INPUTOBJECT_KEYBOARD_MAX)
 		throw std::exception("Keyboard key index out of bounds");
-	if (IsFocused())
+	if (IsFocused() || GetFocus()==m_hwnd)
 		return (IsKeyPressed(key) && !IsPrevKeyPressed(key)) != 0;
 	return false;
 }
@@ -179,7 +178,7 @@ bool InputObject::IsKeyPressed(unsigned int key)
 {
 	if (key >= INPUTOBJECT_KEYBOARD_MAX)
 		throw std::exception("Keyboard key index out of bounds");
-	if (IsFocused())
+	if (IsFocused() || GetFocus()==m_hwnd)
 		return (m_keyboardState[key] & 0x80) != 0;
 	return false;
 }
@@ -187,7 +186,7 @@ bool InputObject::IsKeyReleased(unsigned int key)
 {
 	if (key >= INPUTOBJECT_KEYBOARD_MAX)
 		throw std::exception("Keyboard key index out of bounds");
-	if (IsFocused())
+	if (IsFocused() || GetFocus()==m_hwnd)
 		return (IsPrevKeyPressed(key) && !IsKeyPressed(key)) != 0;
 	return false;
 }
@@ -231,8 +230,8 @@ void InputObject::LockMouse()
 {
 	if (!m_mouseLocked)
 	{
-		m_mouseLocked = true;
 		ShowCursor(false);
+		m_mouseLocked = true;
 	}
 }
 void InputObject::ReleaseMouse()
