@@ -71,8 +71,6 @@ bool MyApplication::Update()
 			playerVelY = 30.0f;
 		if (m_input->IsButtonPressed(0))
 			playerVelY = 0.0f;
-		if (m_input->IsButtonPressed(1))
-			throw std::exception("lol something happened");
 		
 		if (m_input->IsKeyPressed(DIK_A))
 			playerPosX -= 5.0f;

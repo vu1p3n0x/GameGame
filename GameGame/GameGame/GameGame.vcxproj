@@ -22,6 +22,8 @@
     <ClCompile Include="inputobject.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="myapplication.cpp" />
+    <ClCompile Include="screenmanagerobject.cpp" />
+    <ClCompile Include="screenobject.cpp" />
     <ClCompile Include="textobject.cpp" />
     <ClCompile Include="textureclass.cpp" />
     <ClCompile Include="textureshaderclass.cpp" />
@@ -37,6 +39,8 @@
     <ClInclude Include="graphicsobject.h" />
     <ClInclude Include="inputobject.h" />
     <ClInclude Include="myapplication.h" />
+    <ClInclude Include="screenmanagerobject.h" />
+    <ClInclude Include="screenobject.h" />
     <ClInclude Include="textobject.h" />
     <ClInclude Include="textureclass.h" />
     <ClInclude Include="textureshaderclass.h" />

@@ -66,6 +66,12 @@
     <ClCompile Include="applicationobject.cpp">
       <Filter>Source Files\Framework</Filter>
     </ClCompile>
+    <ClCompile Include="screenobject.cpp">
+      <Filter>Source Files\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="screenmanagerobject.cpp">
+      <Filter>Source Files\Framework</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="myapplication.h">
@@ -105,6 +111,12 @@
       <Filter>Header Files\Framework</Filter>
     </ClInclude>
     <ClInclude Include="textureshaderclass.h">
+      <Filter>Header Files\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="screenobject.h">
+      <Filter>Header Files\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="screenmanagerobject.h">
       <Filter>Header Files\Framework</Filter>
     </ClInclude>
   </ItemGroup>
