@@ -10,7 +10,7 @@
 #define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
 
 #include "applicationobject.h"
-#include "bitmapobject.h"
+#include "bitmap.h"
 #include "cameraclass.h"
 #include "colorshaderclass.h"
 #include "d3dclass.h"
