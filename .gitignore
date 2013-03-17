@@ -43,7 +43,7 @@ local.properties
 
 # Build results
 /GameGame/GameGame/Debug/*
-/GameGame/GameGameTests/Debug/*
+/GameGame/WiltFramework/Debug/*
 /GameGame/Debug/*
 [Rr]elease/
 *_i.c
