@@ -27,9 +27,9 @@ public:
 	ScreenObject(const ScreenObject&);
 	~ScreenObject();
 
-	virtual void Initialize(ScreenManagerObject* manager);
-	virtual void Update(InputObject* input);
-	virtual void Draw(GraphicsObject* graphics);
+	virtual void Initialize(ScreenManagerObject* manager, GraphicsObject* graphics);
+	virtual void Update(InputObject* input, GraphicsObject* graphics) = 0;
+	virtual void Draw(GraphicsObject* graphics) = 0;
 	virtual void Shutdown();
 
 	bool IsClosing();

@@ -18,9 +18,11 @@
     <ClCompile Include="d3dclass.cpp" />
     <ClCompile Include="fontobject.cpp" />
     <ClCompile Include="fontshaderclass.cpp" />
+    <ClCompile Include="GameScreen.cpp" />
     <ClCompile Include="graphicsobject.cpp" />
     <ClCompile Include="inputobject.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="mainscreen.cpp" />
     <ClCompile Include="myapplication.cpp" />
     <ClCompile Include="screenmanagerobject.cpp" />
     <ClCompile Include="screenobject.cpp" />
@@ -36,9 +38,12 @@
     <ClInclude Include="d3dclass.h" />
     <ClInclude Include="fontobject.h" />
     <ClInclude Include="fontshaderclass.h" />
+    <ClInclude Include="GameScreen.h" />
     <ClInclude Include="graphicsobject.h" />
     <ClInclude Include="inputobject.h" />
+    <ClInclude Include="mainscreen.h" />
     <ClInclude Include="myapplication.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="screenmanagerobject.h" />
     <ClInclude Include="screenobject.h" />
     <ClInclude Include="textobject.h" />

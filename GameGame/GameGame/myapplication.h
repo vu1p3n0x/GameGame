@@ -6,25 +6,14 @@
 #define MYAPPLICATION_H
 
 #include "applicationobject.h"
-#include "fontobject.h"
-#include "textobject.h"
 #include "bitmapobject.h"
+#include "screenmanagerobject.h"
+#include "mainscreen.h"
 
 class MyApplication : public ApplicationObject
 {
 private:
-	FontObject* myfontobject;
-	TextObject* mytextobject;
-
-	BitmapObject* Cursor;
-
-	BitmapObject* Player;
-	float playerPosX;
-	float playerPosY;
-	float playerVelY;
-
-	float thing;
-	bool focus;
+	ScreenManagerObject* ScreenManager;
 
 public:
 	MyApplication(LPCWSTR name);

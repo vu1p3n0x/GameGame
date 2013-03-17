@@ -19,12 +19,12 @@ ScreenObject::~ScreenObject()
 
 }
 
-void ScreenObject::Initialize(ScreenManagerObject* manager)
+void ScreenObject::Initialize(ScreenManagerObject* manager, GraphicsObject* graphics)
 {
 	m_manager = manager;
 	m_requestClose = false;
 }
-void ScreenObject::Update(InputObject* input)
+void ScreenObject::Update(InputObject* input, GraphicsObject* graphics)
 {
 
 }

@@ -142,7 +142,7 @@ void ApplicationObject::Run()
 			ShowCursor(true);
 			int result = MessageBoxA(m_hwnd, e.what(), "Error during frame update", MB_RETRYCANCEL | MB_ICONERROR | MB_DEFBUTTON2);
 			if (result != IDRETRY)
-				return;
+				break;
 		}
 
 		if (m_input->IsKeyPressed(DIK_LWIN))
@@ -158,7 +158,7 @@ void ApplicationObject::Run()
 			ShowCursor(true);
 			int result = MessageBoxA(m_hwnd, e.what(), "Error during frame draw", MB_RETRYCANCEL | MB_ICONERROR | MB_DEFBUTTON2);
 			if (result != IDRETRY)
-				return;
+				break;
 		}
 
 		m_graphics->GetD3D()->EndScene();
