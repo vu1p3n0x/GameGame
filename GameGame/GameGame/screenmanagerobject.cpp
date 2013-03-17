@@ -43,24 +43,25 @@ void ScreenManagerObject::Initialize(ScreenObject* screen)
 	m_stack = new std::stack<ScreenObject*>();
 	m_stack->push(screen);
 }
-void ScreenManagerObject::Update(InputObject* input)
+void ScreenManagerObject::Update(InputObject* input, GraphicsObject* graphics)
 {
 	if (m_stack->size() == 0)
 		return;
 
+	if (m_stack->top()->IsClosing())
+	{
+		m_stack->top()->Shutdown();
+		delete m_stack->top();
+		m_stack->pop();
+	}
+
 	if (m_next)
 	{
-		if (m_stack->top()->IsClosing())
-		{
-			m_stack->top()->Shutdown();
-			delete m_stack->top();
-			m_stack->pop();
-		}
 		m_stack->push(m_next);
 		m_next = NULL;
 	}
 	
-	m_stack->top()->Update(input);
+	m_stack->top()->Update(input, graphics);
 }
 void ScreenManagerObject::Draw(GraphicsObject* graphics)
 {

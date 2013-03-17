@@ -26,7 +26,7 @@ public:
 	~ScreenManagerObject();
 
 	void Initialize(ScreenObject* screen);
-	void Update(InputObject* input);
+	void Update(InputObject* input, GraphicsObject* graphics);
 	void Draw(GraphicsObject* graphics);
 	void Shutdown();
 
