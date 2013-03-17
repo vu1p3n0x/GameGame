@@ -27,13 +27,11 @@ bool FontObject::Initialize(ID3D11Device* device, char* fontFilename, WCHAR* tex
 
 	m_font = new FontType[95];
 	if (!m_font)
-		// throw std::exception("Error creating font type");
-		return false;
+		throw std::exception("Error creating font type");
 
 	fin.open(fontFilename);
 	if (fin.fail())
-		// throw std::exception("Error: could not open font data file");
-		return false;
+		throw std::exception("Error: could not open font data file");
 
 	for (int i = 0; i < 95; i++)
 	{
@@ -55,12 +53,10 @@ bool FontObject::Initialize(ID3D11Device* device, char* fontFilename, WCHAR* tex
 	// load font texture
 	m_texture = new TextureClass;
 	if (!m_texture)
-		// throw std::exception("Error creating font texture");
-		return false;
+		throw std::exception("Error creating font texture");
 
 	if (!(m_texture->Initialize(device, textureFilename)))
-		// throw std::exception("Error initializing font texture");
-		return false;
+		throw std::exception("Error initializing font texture");
 
 	return true;
 }

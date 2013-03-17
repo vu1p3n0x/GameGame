@@ -35,7 +35,8 @@ void MainScreen::Initialize(ScreenManagerObject* manager, GraphicsObject* graphi
 {
 	ScreenObject::Initialize(manager, graphics);
 
-	m_font->Initialize(graphics->GetD3D()->GetDevice(), "../GameGame/data/fontdata.txt", L"../GameGame/data/font.dds");
+	if (!m_font->Initialize(graphics->GetD3D()->GetDevice(), "data/fontdata.txt", L"data/font.dds"))
+		throw std::exception("Could not Initialize font");
 	m_text->Initialize(graphics, "Main Menu", 10, 10);
 	
 }

@@ -43,7 +43,6 @@
     <ClInclude Include="inputobject.h" />
     <ClInclude Include="mainscreen.h" />
     <ClInclude Include="myapplication.h" />
-    <ClInclude Include="resource.h" />
     <ClInclude Include="screenmanagerobject.h" />
     <ClInclude Include="screenobject.h" />
     <ClInclude Include="textobject.h" />

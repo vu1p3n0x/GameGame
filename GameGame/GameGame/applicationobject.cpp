@@ -132,7 +132,7 @@ void ApplicationObject::Run()
 		}
 
 		if (msg.message == WM_QUIT)
-			return;
+			break;
 
 		// update
 		try { if (!m_input->Update()) throw std::exception("Unknown error occured during input update");

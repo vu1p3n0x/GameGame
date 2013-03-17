@@ -128,9 +128,6 @@
     <ClInclude Include="mainscreen.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GameScreen.h">
       <Filter>Header Files</Filter>
     </ClInclude>

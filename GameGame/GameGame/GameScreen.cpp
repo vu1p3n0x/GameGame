@@ -47,7 +47,7 @@ GameScreen::~GameScreen()
 
 void GameScreen::Initialize(ScreenManagerObject* manager, GraphicsObject* graphics)
 {
-	font->Initialize(graphics->GetD3D()->GetDevice(), "../GameGame/data/fontdata.txt", L"../GameGame/data/font.dds");
+	font->Initialize(graphics->GetD3D()->GetDevice(), "data/fontdata.txt", L"data/font.dds");
 	text->Initialize(graphics, "Game Menu", 10, 10);
 
 	cursorRot = 0.0f;
@@ -56,11 +56,11 @@ void GameScreen::Initialize(ScreenManagerObject* manager, GraphicsObject* graphi
 	playerPosY = 0.0f;
 	playerVelY = 0.0f;
 
-	Cursor->Initialize(graphics, L"../GameGame/data/target.png", 512, 512);
+	Cursor->Initialize(graphics, L"data/target.png", 512, 512);
 	Cursor->SetOrigin(0.5f, 0.5f);
 	Cursor->SetScale(0.125f);
 
-	Player->Initialize(graphics, L"../GameGame/data/ball.png", 256, 256);
+	Player->Initialize(graphics, L"data/ball.png", 256, 256);
 	Player->SetOrigin(0.5f, 0.5f);
 	Player->SetScale(0.5);
 }
