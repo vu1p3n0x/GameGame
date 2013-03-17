@@ -171,3 +171,4 @@ pip-log.txt
 !GameGame/Debug/data
 !GameGame/Debug/*.exe
 !GameGame/Debug/*.lib
+!GameGame/Debug/*.xml

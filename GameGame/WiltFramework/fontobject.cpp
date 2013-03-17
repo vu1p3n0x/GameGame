@@ -4,22 +4,22 @@
 
 #include "fontobject.h"
 
-FontObject::FontObject()
+Wilt::FontObject::FontObject()
 {
 	m_font = NULL;
 	m_texture = NULL;
 }
-FontObject::FontObject(const FontObject& fontobject)
+Wilt::FontObject::FontObject(const Wilt::FontObject& fontobject)
 {
 	m_font = NULL;
 	m_texture = NULL;
 }
-FontObject::~FontObject()
+Wilt::FontObject::~FontObject()
 {
 
 }
 
-bool FontObject::Initialize(ID3D11Device* device, char* fontFilename, WCHAR* textureFilename)
+bool Wilt::FontObject::Initialize(ID3D11Device* device, char* fontFilename, WCHAR* textureFilename)
 {
 	// load font data
 	std::ifstream fin;
@@ -60,7 +60,7 @@ bool FontObject::Initialize(ID3D11Device* device, char* fontFilename, WCHAR* tex
 
 	return true;
 }
-void FontObject::RenderText(GraphicsObject* graphics, TextObject* textobject)
+void Wilt::FontObject::RenderText(GraphicsObject* graphics, Wilt::Text* textobject)
 {
 	unsigned int stride, offset;
 	D3DXVECTOR4 pixelColor;
@@ -90,7 +90,7 @@ void FontObject::RenderText(GraphicsObject* graphics, TextObject* textobject)
 		m_texture->GetTexture(),
 		pixelColor);
 }
-void FontObject::Shutdown()
+void Wilt::FontObject::Shutdown()
 {
 	if (m_font)
 	{
@@ -106,11 +106,11 @@ void FontObject::Shutdown()
 	}
 }
 
-ID3D11ShaderResourceView* FontObject::GetTexture()
+ID3D11ShaderResourceView* Wilt::FontObject::GetTexture()
 {
 	return m_texture->GetTexture();
 }
-void FontObject::BuildVertexArray(void* vertices, const char* text, float positionX, float positionY)
+void Wilt::FontObject::BuildVertexArray(void* vertices, const char* text, float positionX, float positionY)
 {
 	VertexType* vertexPtr;
 	int index, letter;

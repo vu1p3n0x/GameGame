@@ -2,8 +2,8 @@
 // DATE: 2/27/13
 // DESC: declaration of the object to manage a font
 
-#ifndef FONTOBJECT_H
-#define FONTOBJECT_H
+#pragma once
+namespace Wilt { class FontObject; }
 
 #include <d3d11.h>
 #include <d3dx10math.h>
@@ -11,42 +11,38 @@
 
 #include "graphicsobject.h"
 #include "textureclass.h"
+#include "text.h"
 
-#ifndef TEXTOBJECT_H
-class TextObject;
-#endif
-
-class FontObject
+namespace Wilt
 {
-private:
-	struct FontType
+	class FontObject
 	{
-		float left;
-		float right;
-		int size;
-	};
-	struct VertexType
-	{
-		D3DXVECTOR3 position;
-		D3DXVECTOR2 texture;
-	};
+	private:
+		struct FontType
+		{
+			float left;
+			float right;
+			int size;
+		};
+		struct VertexType
+		{
+			D3DXVECTOR3 position;
+			D3DXVECTOR2 texture;
+		};
 
-	FontType* m_font;
-	TextureClass* m_texture;
+		FontType* m_font;
+		TextureClass* m_texture;
 
-public:
-	FontObject();
-	FontObject(const FontObject& fontobject);
-	~FontObject();
+	public:
+		FontObject();
+		FontObject(const FontObject& fontobject);
+		~FontObject();
 
-	bool Initialize(ID3D11Device* device, char* fontFilename, WCHAR* textureFilename);
-	void RenderText(GraphicsObject* graphics, TextObject* textobject);
-	void Shutdown();
+		bool Initialize(ID3D11Device* device, char* fontFilename, WCHAR* textureFilename);
+		void RenderText(GraphicsObject* graphics, Text* textobject);
+		void Shutdown();
 
-	ID3D11ShaderResourceView* GetTexture();
-	void BuildVertexArray(void* vertices, const char* text, float positionX, float positionY);
-};
-
-#include "textobject.h"
-
-#endif
+		ID3D11ShaderResourceView* GetTexture();
+		void BuildVertexArray(void* vertices, const char* text, float positionX, float positionY);
+	}; 
+}

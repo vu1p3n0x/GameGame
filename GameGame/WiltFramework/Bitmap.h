@@ -47,7 +47,7 @@ namespace Wilt
 		/// <param name="textureFilename"> The file location of the texture to be loaded </param>
 		/// <param name="bitmapWidth"> The width of the texture </param>
 		/// <param name="bitmapHeight"> The height of the texture </param>
-		/// <exception cref="std::Exception"> </exception>
+		/// <exception cref="std::exception"> </exception>
 		/// <remarks>
 		/// Gets the needed information from the graphics object in order to render the texture properly as well as creates
 		/// vertex and index buffers for the texture, also loads the texture as sets default values for scale, rotation,
@@ -76,7 +76,7 @@ namespace Wilt
 		void SetPosition(float positionX, float positionY);
 		/// <summary> Sets the size of the texture in scale from the default </summary>
 		/// <param name="scale"> Value from 0.0f to inf to scale the texture where 1.0f is the default </param>
-		/// <exception cref="range_error"> Thrown when scale value is less than 0.0f </exception>
+		/// <exception cref="std::exception"> Thrown when scale value is less than 0.0f </exception>
 		/// <remarks>
 		/// Scales the texture the the specified amount (i.e. 2.0f is twice as big whereas 0.5f is half as big). Range
 		/// exception will be thrown for negative values but not 0.0f (texture will not be drawn)
@@ -85,7 +85,7 @@ namespace Wilt
 		/// <summary> Sets the size of the texture in scale from the default in the X and Y direction </summary>
 		/// <param name="scaleX"> Value from 0.0f to inf to scale the texture in the X direction where 1.0f is the default </param>
 		/// <param name="scaleY"> Value from 0.0f to inf to scale the texture in the Y direction where 1.0f is the default </param>
-		/// <exception cref="range_error"> Thrown when scale value is less than 0.0f </exception>
+		/// <exception cref="std::exception"> Thrown when scale value is less than 0.0f </exception>
 		/// <remarks>
 		/// Scales the texture the the specified amount (i.e. 2.0f is twice as big whereas 0.5f is half as big). Range
 		/// exception will be thrown for negative values but not 0.0f (texture will not be drawn). Scaling is applied

@@ -13,7 +13,7 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Source Files\Shader Programs">
+    <Filter Include="Resource Files\Shader Programs">
       <UniqueIdentifier>{a4f320e1-75e3-4594-8df0-4e951c9b7d2d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -57,16 +57,16 @@
     <ClInclude Include="screenobject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="textobject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="textureclass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="textureshaderclass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="bitmap.h">
+    <ClInclude Include="Bitmap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Text.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -78,9 +78,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="textureclass.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="textobject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="screenobject.cpp">
@@ -113,28 +110,31 @@
     <ClCompile Include="applicationobject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="bitmap.cpp">
+    <ClCompile Include="Bitmap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Text.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="font.vs">
-      <Filter>Source Files\Shader Programs</Filter>
+      <Filter>Resource Files\Shader Programs</Filter>
     </None>
     <None Include="font.ps">
-      <Filter>Source Files\Shader Programs</Filter>
+      <Filter>Resource Files\Shader Programs</Filter>
     </None>
     <None Include="color.vs">
-      <Filter>Source Files\Shader Programs</Filter>
+      <Filter>Resource Files\Shader Programs</Filter>
     </None>
     <None Include="color.ps">
-      <Filter>Source Files\Shader Programs</Filter>
+      <Filter>Resource Files\Shader Programs</Filter>
     </None>
     <None Include="texture.ps">
-      <Filter>Source Files\Shader Programs</Filter>
+      <Filter>Resource Files\Shader Programs</Filter>
     </None>
     <None Include="texture.vs">
-      <Filter>Source Files\Shader Programs</Filter>
+      <Filter>Resource Files\Shader Programs</Filter>
     </None>
   </ItemGroup>
 </Project>

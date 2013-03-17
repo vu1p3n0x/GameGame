@@ -3,7 +3,6 @@
 // DESC: implementation of an object to manage external input
 
 #include "inputobject.h"
-#include <exception>
 
 InputObject::InputObject()
 {
