@@ -1,39 +1,37 @@
-// FILE: fontobject.cpp
-// DATE: 2/27/13
+// FILE: Font.cpp
+// DATE: 2/27/13 - 3/18/13
 // DESC: implementation of the object to manage a font
 
-#include "fontobject.h"
+#include "Font.h"
 
-Wilt::FontObject::FontObject()
+Wilt::Font::Font()
 {
-	m_font = NULL;
 	m_texture = NULL;
+	m_fontData = NULL;
 }
-Wilt::FontObject::FontObject(const Wilt::FontObject& fontobject)
+Wilt::Font::~Font()
 {
-	m_font = NULL;
-	m_texture = NULL;
-}
-Wilt::FontObject::~FontObject()
-{
-
+	Shutdown();
 }
 
-bool Wilt::FontObject::Initialize(ID3D11Device* device, char* fontFilename, WCHAR* textureFilename)
+void Wilt::Font::Initialize(ID3D11Device* device, char* fontFilename, WCHAR* textureFilename)
 {
 	// load font data
 	std::ifstream fin;
 	char temp;
+	std::string temp2;
 
-	m_font = new FontType[95];
-	if (!m_font)
+	m_fontData = new float[96];
+	if (!m_fontData)
 		throw std::exception("Error creating font type");
+
+	m_fontData[0] = 0.0f;
 
 	fin.open(fontFilename);
 	if (fin.fail())
 		throw std::exception("Error: could not open font data file");
 
-	for (int i = 0; i < 95; i++)
+	for (int i = 1; i < 96; i++)
 	{
 		fin.get(temp);
 		while(temp != ' ')
@@ -43,24 +41,21 @@ bool Wilt::FontObject::Initialize(ID3D11Device* device, char* fontFilename, WCHA
 		while(temp != ' ')
 			fin.get(temp);
 
-		fin >> m_font[i].left;
-		fin >> m_font[i].right;
-		fin >> m_font[i].size;
+		fin >> temp2;
+		fin >> m_fontData[i];
+		fin >> temp2;
 	}
 
 	fin.close();
 	
 	// load font texture
-	m_texture = new TextureClass;
+	m_texture = new Texture;
 	if (!m_texture)
 		throw std::exception("Error creating font texture");
 
-	if (!(m_texture->Initialize(device, textureFilename)))
-		throw std::exception("Error initializing font texture");
-
-	return true;
+	m_texture->Initialize(device, textureFilename);
 }
-void Wilt::FontObject::RenderText(GraphicsObject* graphics, Wilt::Text* textobject)
+void Wilt::Font::RenderText(GraphicsObject* graphics, Wilt::Text* textobject)
 {
 	unsigned int stride, offset;
 	D3DXVECTOR4 pixelColor;
@@ -90,12 +85,12 @@ void Wilt::FontObject::RenderText(GraphicsObject* graphics, Wilt::Text* textobje
 		m_texture->GetTexture(),
 		pixelColor);
 }
-void Wilt::FontObject::Shutdown()
+void Wilt::Font::Shutdown()
 {
-	if (m_font)
+	if (m_fontData)
 	{
-		delete [] m_font;
-		m_font = NULL;
+		delete [] m_fontData;
+		m_fontData = NULL;
 	}
 
 	if (m_texture)
@@ -106,11 +101,11 @@ void Wilt::FontObject::Shutdown()
 	}
 }
 
-ID3D11ShaderResourceView* Wilt::FontObject::GetTexture()
+ID3D11ShaderResourceView* Wilt::Font::GetTexture()
 {
 	return m_texture->GetTexture();
 }
-void Wilt::FontObject::BuildVertexArray(void* vertices, const char* text, float positionX, float positionY)
+void Wilt::Font::BuildVertexArray(void* vertices, const char* text, float positionX, float positionY)
 {
 	VertexType* vertexPtr;
 	int index, letter;

@@ -2,21 +2,9 @@
 // DATE: 2/27/13
 // DESC: implementation of the class to manage an object of text
 
-#include "text.h"
+#include "Text.h"
 
 Wilt::Text::Text()
-{
-	m_vertexBuffer = NULL;
-	m_indexBuffer = NULL;
-	m_text = "";
-	m_positionX = 0.0f;
-	m_positionY = 0.0f;
-	m_recreate = true;
-	m_red = 1.0f;
-	m_green = 1.0f;
-	m_blue = 1.0f;
-}
-Wilt::Text::Text(const Wilt::Text& textobject)
 {
 	m_vertexBuffer = NULL;
 	m_indexBuffer = NULL;
@@ -33,7 +21,7 @@ Wilt::Text::~Text()
 
 }
 
-bool Wilt::Text::Initialize(GraphicsObject* graphics, std::string text, float positionX, float positionY)
+bool Wilt::Text::Initialize(GraphicsObject* graphics, std::string text)
 {
 	VertexType* vertices;
 	unsigned long* indices;
@@ -44,8 +32,8 @@ bool Wilt::Text::Initialize(GraphicsObject* graphics, std::string text, float po
 	HRESULT result;
 
 	m_text = text;
-	m_positionX = positionX;
-	m_positionY = positionY;
+	m_positionX = 0;
+	m_positionY = 0;
 
 	m_vertexCount = 6 * text.length();
 	m_indexCount = 6 * text.length();
@@ -177,14 +165,6 @@ void Wilt::Text::Recreate(GraphicsObject* graphics, FontObject* font)
 
 }
 
-void Wilt::Text::SetText(std::string text)
-{
-	if (m_text == text)
-		return;
-
-	m_text = text;
-	m_recreate = true;
-}
 void Wilt::Text::SetPosition(float positionX, float positionY)
 {
 	if (m_positionX == positionX && m_positionY == positionY)

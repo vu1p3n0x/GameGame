@@ -21,7 +21,5 @@
 #include "screenmanagerobject.h"
 #include "screenobject.h"
 #include "Text.h"
-#include "textureclass.h"
+#include "Texture.h"
 #include "textureshaderclass.h"
-
-// TODO: reference additional headers your program requires here

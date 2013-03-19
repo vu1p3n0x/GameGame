@@ -69,7 +69,7 @@ void Wilt::Bitmap::Render(GraphicsObject* graphics)
 	graphics->GetTextureShader()->Render(
 		graphics->GetD3D()->GetDeviceContext(),
 		INDEXCOUNT, 
-		m_origin * m_scale * m_rotation * m_position * worldMatrix,
+		GetTransformation() * worldMatrix,
 		viewMatrix,
 		orthoMatrix,
 		m_texture->GetTexture());
@@ -94,6 +94,12 @@ void Wilt::Bitmap::Shutdown()
 		m_vertexBuffer->Release();
 		m_vertexBuffer = NULL;
 	}
+}
+
+// Accessors
+D3DXMATRIX Wilt::Bitmap::GetTransformation()
+{
+	return m_origin * m_scale * m_rotation * m_position;
 }
 
 // Modifiers

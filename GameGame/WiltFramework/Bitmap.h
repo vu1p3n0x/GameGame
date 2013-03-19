@@ -66,6 +66,12 @@ namespace Wilt
 		/// </remarks>
 		void Shutdown();
 
+		/// <summary> Gets the transformation matrix used to draw the texture </summary>
+		/// <remarks>
+		/// Is the combination of origin, scale, rotation, and position matrices
+		/// </remarks>
+		D3DXMATRIX GetTransformation();
+
 		/// <summary> Moves the texture to the specified screen coordinate </summary>
 		/// <param name="positionX"> X location to render the texture </param>
 		/// <param name="positionY"> Y location to render the texture </param>

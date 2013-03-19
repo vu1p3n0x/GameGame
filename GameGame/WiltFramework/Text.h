@@ -8,7 +8,7 @@ namespace Wilt { class Text; }
 #include <string>
 
 #include "graphicsobject.h"
-#include "fontobject.h"
+#include "Font.h"
 
 namespace Wilt
 {
@@ -30,17 +30,21 @@ namespace Wilt
 		float m_red, m_blue, m_green;
 		bool m_recreate;
 
-		friend class FontObject;
+		friend class Font;
 
-		void Recreate(GraphicsObject* graphics, FontObject* font);
+		void Recreate(GraphicsObject* graphics, Font* font);
 
 	public:
 		Text();
-		Text(const Text& Text);
 		~Text();
 
-		bool Initialize(GraphicsObject* graphics, std::string text, float positionX, float positionY);
+		/// <summary> Initializes the text from a string and position </summary>
+		bool Initialize(GraphicsObject* graphics, std::string text);
 		void Shutdown();
+
+		D3DXMATRIX GetTransformation();
+		float GetHeight();
+		float GetWidth();
 
 		void SetText(std::string text);
 		void SetPosition(float positionX, float positionY);
