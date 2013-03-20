@@ -5,8 +5,7 @@
 #ifndef MYAPPLICATION_H
 #define MYAPPLICATION_H
 
-#include "applicationobject.h"
-#include "screenmanagerobject.h"
+#include "WiltFramework.h"
 
 class MyApplication : public ApplicationObject
 {

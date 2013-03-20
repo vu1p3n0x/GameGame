@@ -7,8 +7,7 @@
 
 #pragma comment(lib, "WiltFramework.lib")
 
-#include "screenobject.h"
-#include "text.h"
+#include "WiltFramework.h"
 
 using namespace Wilt;
 

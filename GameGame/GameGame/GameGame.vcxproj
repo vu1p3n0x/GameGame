@@ -94,7 +94,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <LibraryPath>D:\My Documents\GitHub\GameGame\GameGame\Debug;$(LibraryPath)</LibraryPath>
-    <IncludePath>D:\My Documents\GitHub\GameGame\GameGame\WiltFramework;$(IncludePath)</IncludePath>
+    <IncludePath>D:\My Documents\GitHub\GameGame\GameGame\Debug;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>

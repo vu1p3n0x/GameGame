@@ -7,7 +7,7 @@
 
 #pragma comment(lib, "WiltFramework.lib")
 
-#include "stdafx.h"
+#include "WiltFramework.h"
 
 using namespace Wilt;
 
