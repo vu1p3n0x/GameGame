@@ -14,7 +14,7 @@
 #include "cameraclass.h"
 #include "colorshaderclass.h"
 #include "d3dclass.h"
-#include "fontobject.h"
+#include "Font.h"
 #include "fontshaderclass.h"
 #include "graphicsobject.h"
 #include "inputobject.h"

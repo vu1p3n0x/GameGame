@@ -6,9 +6,7 @@
 #define MYAPPLICATION_H
 
 #include "applicationobject.h"
-#include "bitmapobject.h"
 #include "screenmanagerobject.h"
-#include "mainscreen.h"
 
 class MyApplication : public ApplicationObject
 {

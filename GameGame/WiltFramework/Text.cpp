@@ -21,10 +21,10 @@ Wilt::Text::~Text()
 
 }
 
-bool Wilt::Text::Initialize(GraphicsObject* graphics, std::string text)
+bool Wilt::Text::Initialize(GraphicsObject* graphics, Wilt::Font* font, std::string text)
 {
-	VertexType* vertices;
-	unsigned long* indices;
+	VertexType* vertices = NULL;
+	unsigned int* indices = NULL;
 	D3D11_BUFFER_DESC vertexBufferDesc;
 	D3D11_BUFFER_DESC indexBufferDesc;
 	D3D11_SUBRESOURCE_DATA vertexData;
@@ -35,21 +35,10 @@ bool Wilt::Text::Initialize(GraphicsObject* graphics, std::string text)
 	m_positionX = 0;
 	m_positionY = 0;
 
-	m_vertexCount = 6 * text.length();
+	m_vertexCount = 4 * text.length();
 	m_indexCount = 6 * text.length();
 
-	vertices = new VertexType[m_vertexCount];
-	if (!vertices)
-		throw std::exception("Error Initializing Vertex Array in Text");
-
-	indices = new unsigned long[m_indexCount];
-	if (!indices)
-		throw std::exception("Error Initializing Index Array in Text");
-
-	memset(vertices, 0, sizeof(VertexType)*m_vertexCount);
-
-	for (int i = 0; i < m_indexCount; i++)
-		indices[i] = i;
+	font->BuildArrays(vertices, indices, text.c_str());
 
 	vertexBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
 	vertexBufferDesc.ByteWidth = sizeof(VertexType) * m_vertexCount;
@@ -66,8 +55,11 @@ bool Wilt::Text::Initialize(GraphicsObject* graphics, std::string text)
 	if (FAILED(result))
 		throw std::exception("Error Initializing Vertex Buffer in Text");
 
+	delete [] vertices;
+	vertices = NULL;
+
 	indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	indexBufferDesc.ByteWidth = sizeof(unsigned long) * m_indexCount;
+	indexBufferDesc.ByteWidth = sizeof(unsigned int) * m_indexCount;
 	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
 	indexBufferDesc.CPUAccessFlags = 0;
 	indexBufferDesc.MiscFlags = 0;
@@ -80,9 +72,6 @@ bool Wilt::Text::Initialize(GraphicsObject* graphics, std::string text)
 	result = graphics->GetD3D()->GetDevice()->CreateBuffer(&indexBufferDesc, &indexData, &m_indexBuffer);
 	if (FAILED(result))
 		throw std::exception("Error Initializing Index Buffer in Text");
-
-	delete [] vertices;
-	vertices = NULL;
 
 	delete [] indices;
 	indices = NULL;
@@ -103,7 +92,7 @@ void Wilt::Text::Shutdown()
 	}
 }
 
-void Wilt::Text::Recreate(GraphicsObject* graphics, FontObject* font)
+void Wilt::Text::Recreate(GraphicsObject* graphics, Font* font)
 {
 	if (!m_recreate)
 		return;
@@ -128,7 +117,7 @@ void Wilt::Text::Recreate(GraphicsObject* graphics, FontObject* font)
 		throw std::exception("Error recreating text object vertices");
 
 	memset(vertices, 0, sizeof(VertexType) * m_vertexCount);
-	font->BuildVertexArray((void*)vertices, m_text.c_str(), drawX, drawY);
+	// font->BuildVertexArray((void*)vertices, m_text.c_str(), drawX, drawY);
 
 	result = graphics->GetD3D()->GetDeviceContext()->Map(m_vertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 	if (FAILED(result))

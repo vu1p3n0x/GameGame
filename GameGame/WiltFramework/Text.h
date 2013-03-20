@@ -39,7 +39,7 @@ namespace Wilt
 		~Text();
 
 		/// <summary> Initializes the text from a string and position </summary>
-		bool Initialize(GraphicsObject* graphics, std::string text);
+		bool Initialize(GraphicsObject* graphics, Wilt::Font* font, std::string text);
 		void Shutdown();
 
 		D3DXMATRIX GetTransformation();

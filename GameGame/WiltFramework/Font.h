@@ -36,6 +36,6 @@ namespace Wilt
 		void Shutdown();
 
 		ID3D11ShaderResourceView* GetTexture();
-		void BuildVertexArray(void* vertices, const char* text, float positionX, float positionY);
+		void BuildArrays(void* vertices, unsigned int* indices, const char* text);
 	}; 
 }

@@ -5,19 +5,21 @@
 #ifndef GAMESCREEN_H
 #define GAMESCREEN_H
 
-#include "screenobject.h"
-#include "bitmapobject.h"
-#include "textobject.h"
+#pragma comment(lib, "WiltFramework.lib")
+
+#include "stdafx.h"
+
+using namespace Wilt;
 
 class GameScreen : public ScreenObject
 {
-	FontObject* font;
-	TextObject* text;
+	Font* font;
+	Text* text;
 
-	BitmapObject* Cursor;
+	Bitmap* Cursor;
 	float cursorRot;
 
-	BitmapObject* Player;
+	Bitmap* Player;
 	float playerPosX;
 	float playerPosY;
 	float playerVelY;

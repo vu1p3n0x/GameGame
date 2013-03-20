@@ -80,7 +80,7 @@
     <ClInclude Include="cameraclass.h" />
     <ClInclude Include="colorshaderclass.h" />
     <ClInclude Include="d3dclass.h" />
-    <ClInclude Include="fontobject.h" />
+    <ClInclude Include="Font.h" />
     <ClInclude Include="fontshaderclass.h" />
     <ClInclude Include="graphicsobject.h" />
     <ClInclude Include="inputobject.h" />
@@ -98,7 +98,7 @@
     <ClCompile Include="cameraclass.cpp" />
     <ClCompile Include="colorshaderclass.cpp" />
     <ClCompile Include="d3dclass.cpp" />
-    <ClCompile Include="fontobject.cpp" />
+    <ClCompile Include="Font.cpp" />
     <ClCompile Include="fontshaderclass.cpp" />
     <ClCompile Include="graphicsobject.cpp" />
     <ClCompile Include="inputobject.cpp" />

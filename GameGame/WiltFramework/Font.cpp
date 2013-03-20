@@ -105,47 +105,56 @@ ID3D11ShaderResourceView* Wilt::Font::GetTexture()
 {
 	return m_texture->GetTexture();
 }
-void Wilt::Font::BuildVertexArray(void* vertices, const char* text, float positionX, float positionY)
+void Wilt::Font::BuildArrays(void* vertices, unsigned int* indices, const char* text)
 {
 	VertexType* vertexPtr;
-	int index, letter;
+	int letter, length;
+	float offset, split;
 
+	length = (int)strlen(text);
+	offset = 0.0f;
+
+	vertices = new VertexType[length * 4];
+	if (!vertices)
+		throw std::exception("Error: could not create vertex array for Text");
 	vertexPtr = (VertexType*)vertices;
 
-	index = 0;
-	for (int i = 0; i < (int)strlen(text); i++)
+	indices  = new unsigned int[length * 6];
+	if (!indices)
+		throw std::exception("Error: could not create index array for Text");
+
+	for (int i = 0; i < length; i++)
 	{
 		letter = (int)text[i]-32;
 
 		if (letter == 0)
-			positionX = positionX + 3.0f;
+			split = 0.08f;
 		else
-		{
-			vertexPtr[index].position = D3DXVECTOR3(positionX, positionY, 0.0f);
-			vertexPtr[index].texture = D3DXVECTOR2(m_font[letter].left, 0.0f);
-			index++;
+			split = m_fontData[letter+1] - m_fontData[letter];
 
-			vertexPtr[index].position = D3DXVECTOR3((positionX + m_font[letter].size), (positionY - 16), 0.0f);
-			vertexPtr[index].texture = D3DXVECTOR2(m_font[letter].right, 1.0f);
-			index++;
+		indices[i*6+0] = i*6+1;
+		indices[i*6+1] = i*6+3;
+		indices[i*6+2] = i*6+0;
+		indices[i*6+3] = i*6+1;
+		indices[i*6+4] = i*6+2;
+		indices[i*6+5] = i*6+3;
 
-			vertexPtr[index].position = D3DXVECTOR3(positionX, (positionY - 16), 0.0f);
-			vertexPtr[index].texture = D3DXVECTOR2(m_font[letter].left, 1.0f);
-			index++;
+		// bottom left
+		vertexPtr[i*4+0].position = D3DXVECTOR3(offset, 0.0f, 0.0f);
+		vertexPtr[i*4+0].texture = D3DXVECTOR2(m_fontData[letter], 1.0f);
 
-			vertexPtr[index].position = D3DXVECTOR3(positionX, positionY, 0.0f);
-			vertexPtr[index].texture = D3DXVECTOR2(m_font[letter].left, 0.0f);
-			index++;
+		// top left
+		vertexPtr[i*4+1].position = D3DXVECTOR3(offset, 1.0f, 0.0f);
+		vertexPtr[i*4+1].texture = D3DXVECTOR2(m_fontData[letter], 0.0f);
 
-			vertexPtr[index].position = D3DXVECTOR3(positionX + m_font[letter].size, positionY, 0.0f);
-			vertexPtr[index].texture = D3DXVECTOR2(m_font[letter].right, 0.0f);
-			index++;
+		// top right
+		vertexPtr[i*4+2].position = D3DXVECTOR3(offset + split, 1.0f, 0.0f);
+		vertexPtr[i*4+2].texture = D3DXVECTOR2(m_fontData[letter+1], 0.0f);
 
-			vertexPtr[index].position = D3DXVECTOR3((positionX + m_font[letter].size), (positionY - 16), 0.0f);
-			vertexPtr[index].texture = D3DXVECTOR2(m_font[letter].right, 1.0f);
-			index++;
+		// bottom right
+		vertexPtr[i*4+3].position = D3DXVECTOR3(offset + split, 0.0f, 0.0f);
+		vertexPtr[i*4+3].texture = D3DXVECTOR2(m_fontData[letter+1], 1.0f);
 
-			positionX = positionX + m_font[letter].size + 1.0f;
-		}
+		offset = offset + split + 0.03f;
 	}
 }

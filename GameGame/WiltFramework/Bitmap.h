@@ -8,7 +8,7 @@ namespace Wilt { class Bitmap; }
 #include <d3d11.h>
 #include <d3dx10math.h>
 
-#include "textureclass.h"
+#include "Texture.h"
 #include "graphicsobject.h"
 
 namespace Wilt
@@ -25,7 +25,7 @@ namespace Wilt
 		void InitializeBuffers(ID3D11Device* device);
 
 		ID3D11Buffer *m_vertexBuffer, *m_indexBuffer;
-		TextureClass *m_texture;
+		Texture *m_texture;
 
 		int m_screenWidth, m_screenHeight;
 		int m_bitmapWidth, m_bitmapHeight;

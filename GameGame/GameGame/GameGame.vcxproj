@@ -57,6 +57,11 @@
     <None Include="texture.ps" />
     <None Include="texture.vs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WiltFramework\WiltFramework.vcxproj">
+      <Project>{2fc64b7b-6e3b-4466-9818-594e8ff6796f}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{753151C4-2E8A-4372-AAAA-FD96C4B80131}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
@@ -88,6 +93,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <LibraryPath>D:\My Documents\GitHub\GameGame\GameGame\Debug;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\My Documents\GitHub\GameGame\GameGame\WiltFramework;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -105,6 +112,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <Profile>true</Profile>
+      <AdditionalDependencies>WiltFramework.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>

@@ -5,14 +5,18 @@
 #ifndef MAINSCREEN_H
 #define MAINSCREEN_H
 
+#pragma comment(lib, "WiltFramework.lib")
+
 #include "screenobject.h"
-#include "textobject.h"
+#include "text.h"
+
+using namespace Wilt;
 
 class MainScreen : public ScreenObject
 {
 private:
-	TextObject* m_text;
-	FontObject* m_font;
+	Text* m_text;
+	Font* m_font;
 
 public:
 	MainScreen();

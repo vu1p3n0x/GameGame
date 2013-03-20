@@ -7,7 +7,7 @@
 // Contructors and Destructors
 Wilt::Bitmap::Bitmap()
 {
-	m_texture = new TextureClass;
+	m_texture = new Texture;
 
 	m_vertexBuffer = NULL;
 	m_indexBuffer = NULL;
@@ -40,8 +40,7 @@ void Wilt::Bitmap::Initialize(GraphicsObject* graphics, WCHAR* textureFilename, 
 	InitializeBuffers(graphics->GetD3D()->GetDevice());
 
 	// load texture into graphics memory
-	if (!(m_texture->Initialize(graphics->GetD3D()->GetDevice(), textureFilename)))
-		throw std::exception("Could not initialize texture");
+	m_texture->Initialize(graphics->GetD3D()->GetDevice(), textureFilename);
 
 	// set default transformations
 	SetPosition(0.0f, 0.0f);
