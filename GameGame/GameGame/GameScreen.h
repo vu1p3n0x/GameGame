@@ -5,8 +5,6 @@
 #ifndef GAMESCREEN_H
 #define GAMESCREEN_H
 
-#pragma comment(lib, "WiltFramework.lib")
-
 #include "WiltFramework.h"
 
 using namespace Wilt;

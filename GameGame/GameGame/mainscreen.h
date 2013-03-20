@@ -5,8 +5,6 @@
 #ifndef MAINSCREEN_H
 #define MAINSCREEN_H
 
-#pragma comment(lib, "WiltFramework.lib")
-
 #include "WiltFramework.h"
 #include "GameScreen.h"
 
