@@ -6,6 +6,7 @@
 #define MYAPPLICATION_H
 
 #include "WiltFramework.h"
+#include "mainscreen.h"
 
 class MyApplication : public ApplicationObject
 {
@@ -20,7 +21,5 @@ public:
 	bool Draw();
 	void Shutdown();
 };
-
-static MyApplication* AppObject = NULL;
 
 #endif

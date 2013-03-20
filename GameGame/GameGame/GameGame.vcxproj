@@ -11,43 +11,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="applicationobject.cpp" />
-    <ClCompile Include="bitmapobject.cpp" />
-    <ClCompile Include="cameraclass.cpp" />
-    <ClCompile Include="colorshaderclass.cpp" />
-    <ClCompile Include="d3dclass.cpp" />
-    <ClCompile Include="fontobject.cpp" />
-    <ClCompile Include="fontshaderclass.cpp" />
     <ClCompile Include="GameScreen.cpp" />
-    <ClCompile Include="graphicsobject.cpp" />
-    <ClCompile Include="inputobject.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mainscreen.cpp" />
     <ClCompile Include="myapplication.cpp" />
-    <ClCompile Include="screenmanagerobject.cpp" />
-    <ClCompile Include="screenobject.cpp" />
-    <ClCompile Include="textobject.cpp" />
-    <ClCompile Include="textureclass.cpp" />
-    <ClCompile Include="textureshaderclass.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="applicationobject.h" />
-    <ClInclude Include="bitmapobject.h" />
-    <ClInclude Include="cameraclass.h" />
-    <ClInclude Include="colorshaderclass.h" />
-    <ClInclude Include="d3dclass.h" />
-    <ClInclude Include="fontobject.h" />
-    <ClInclude Include="fontshaderclass.h" />
     <ClInclude Include="GameScreen.h" />
-    <ClInclude Include="graphicsobject.h" />
-    <ClInclude Include="inputobject.h" />
     <ClInclude Include="mainscreen.h" />
     <ClInclude Include="myapplication.h" />
-    <ClInclude Include="screenmanagerobject.h" />
-    <ClInclude Include="screenobject.h" />
-    <ClInclude Include="textobject.h" />
-    <ClInclude Include="textureclass.h" />
-    <ClInclude Include="textureshaderclass.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="color.ps" />
@@ -94,7 +66,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <LibraryPath>D:\My Documents\GitHub\GameGame\GameGame\Debug;$(LibraryPath)</LibraryPath>
-    <IncludePath>D:\My Documents\GitHub\GameGame\GameGame\Debug;$(IncludePath)</IncludePath>
+    <IncludePath>D:\My Documents\GitHub\GameGame\GameGame\WiltFramework;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -112,7 +84,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <Profile>true</Profile>
-      <AdditionalDependencies>WiltFramework.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>"D:\My Documents\GitHub\GameGame\GameGame\Debug\WiltFramework.lib";%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>

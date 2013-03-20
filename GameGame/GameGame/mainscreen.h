@@ -8,6 +8,7 @@
 #pragma comment(lib, "WiltFramework.lib")
 
 #include "WiltFramework.h"
+#include "GameScreen.h"
 
 using namespace Wilt;
 

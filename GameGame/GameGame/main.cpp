@@ -11,7 +11,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pScmdline,
 	MyApplication* app = new MyApplication(L"TestGame");
 	if (!app)
 		return 0;
-	AppObject = app;
+	ApplicationObject::Current = app;
 
 	app->InitializeWindow(1280, 720, false);
 	app->Run();

@@ -4,6 +4,7 @@
 
 #ifndef APPLICATIONOBJECT_H
 #define APPLICATIONOBJECT_H
+#pragma once
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -48,9 +49,10 @@ public:
 	bool GetFullscreen();
 
 	LRESULT CALLBACK MessageHandler(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
+
+	static ApplicationObject* Current;
 };
 
-ApplicationObject* AppObject;
 static LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 
 #endif;

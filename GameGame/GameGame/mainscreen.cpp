@@ -7,13 +7,13 @@
 
 MainScreen::MainScreen()
 {
-	m_text = new TextObject;
-	m_font = new FontObject;
+	m_text = new Text;
+	m_font = new Font;
 }
 MainScreen::MainScreen(const MainScreen& mainscreen)
 {
-	m_text = new TextObject;
-	m_font = new FontObject;
+	m_text = new Text;
+	m_font = new Font;
 }
 MainScreen::~MainScreen()
 {
@@ -35,9 +35,8 @@ void MainScreen::Initialize(ScreenManagerObject* manager, GraphicsObject* graphi
 {
 	ScreenObject::Initialize(manager, graphics);
 
-	if (!m_font->Initialize(graphics->GetD3D()->GetDevice(), "data/fontdata.txt", L"data/font.dds"))
-		throw std::exception("Could not Initialize font");
-	m_text->Initialize(graphics, "Main Menu", 10, 10);
+	m_font->Initialize(graphics->GetD3D()->GetDevice(), "data/fontdata.txt", L"data/font.dds");
+	m_text->Initialize(graphics, m_font, "Main Menu");
 	
 }
 void MainScreen::Update(InputObject* input, GraphicsObject* graphics)

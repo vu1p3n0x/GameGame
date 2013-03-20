@@ -10,7 +10,7 @@
 #define INPUTOBJECT_KEYBOARD_MAX 256
 #define INPUTOBJECT_MOUSE_MAX 4
 
-#pragma comment(lib, "dinput8.lib")
+// #pragma comment(lib, "dinput8.lib")
 #pragma comment(lib, "dxguid.lib")
 
 #include <dinput.h>

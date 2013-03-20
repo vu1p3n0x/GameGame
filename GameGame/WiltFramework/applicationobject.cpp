@@ -4,6 +4,8 @@
 
 #include "applicationobject.h"
 
+ApplicationObject* ApplicationObject::Current;
+
 ApplicationObject::ApplicationObject()
 {
 	m_instance = GetModuleHandle(NULL);
@@ -256,6 +258,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)
 			return 0;
 
 		default:
-			return AppObject->MessageHandler(hwnd, umessage, wparam, lparam);
+			return ApplicationObject::Current->MessageHandler(hwnd, umessage, wparam, lparam);
 	}
 }

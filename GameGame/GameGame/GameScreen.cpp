@@ -2,19 +2,19 @@
 
 GameScreen::GameScreen()
 {
-	font = new FontObject;
-	text = new TextObject;
+	font = new Font;
+	text = new Text;
 
-	Cursor = new BitmapObject;
-	Player = new BitmapObject;
+	Cursor = new Bitmap;
+	Player = new Bitmap;
 }
 GameScreen::GameScreen(const GameScreen& gamescreen)
 {
-	font = new FontObject;
-	text = new TextObject;
+	font = new Font;
+	text = new Text;
 
-	Cursor = new BitmapObject;
-	Player = new BitmapObject;
+	Cursor = new Bitmap;
+	Player = new Bitmap;
 }
 GameScreen::~GameScreen()
 {
@@ -48,7 +48,7 @@ GameScreen::~GameScreen()
 void GameScreen::Initialize(ScreenManagerObject* manager, GraphicsObject* graphics)
 {
 	font->Initialize(graphics->GetD3D()->GetDevice(), "data/fontdata.txt", L"data/font.dds");
-	text->Initialize(graphics, "Game Menu", 10, 10);
+	text->Initialize(graphics, font, "Game Menu");
 
 	cursorRot = 0.0f;
 
