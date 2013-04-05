@@ -27,7 +27,7 @@ TextureShaderClass::~TextureShaderClass()
 
 bool TextureShaderClass::Initialize(ID3D11Device* device, HWND hwnd)
 {
-	if (!InitializeShader(device, hwnd, L"../GameGame/texture.vs", L"../GameGame/texture.ps"))
+	if (!InitializeShader(device, hwnd, L"../Debug/data/shaders/texture.vs", L"../Debug/data/shaders/texture.ps"))
 		return false;
 
 	return true;

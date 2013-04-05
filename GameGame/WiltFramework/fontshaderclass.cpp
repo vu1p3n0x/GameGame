@@ -29,7 +29,7 @@ FontShaderClass::~FontShaderClass()
 
 bool FontShaderClass::Initialize(ID3D11Device* device, HWND hwnd)
 {
-	if (!InitializeShader(device, hwnd, L"../GameGame/font.vs", L"../GameGame/font.ps"))
+	if (!InitializeShader(device, hwnd, L"../Debug/data/shaders/font.vs", L"../Debug/data/shaders/font.ps"))
 		return false;
 
 	return true;

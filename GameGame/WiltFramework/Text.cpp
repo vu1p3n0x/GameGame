@@ -36,7 +36,14 @@ bool Wilt::Text::Initialize(GraphicsObject* graphics, Wilt::Font* font, std::str
 	m_positionY = 0;
 
 	m_vertexCount = 4 * text.length();
+	vertices = new VertexType[m_vertexCount];
+	if (!vertices)
+		throw std::exception("Error: could not create vertex array for Text");
+
 	m_indexCount = 6 * text.length();
+	indices  = new unsigned int[m_indexCount];
+	if (!indices)
+		throw std::exception("Error: could not create index array for Text");
 
 	font->BuildArrays(vertices, indices, text.c_str());
 

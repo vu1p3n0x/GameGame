@@ -25,7 +25,7 @@ ColorShaderClass::~ColorShaderClass()
 
 bool ColorShaderClass::Initialize(ID3D11Device* device, HWND hwnd)
 {
-	if (!(InitializeShader(device, hwnd, L"../GameGame/color.vs", L"../GameGame/color.ps")))
+	if (!(InitializeShader(device, hwnd, L"../Debug/data/shaders/color.vs", L"../Debug/data/shaders/color.ps")))
 		return false;
 
 	return true;

@@ -114,14 +114,7 @@ void Wilt::Font::BuildArrays(void* vertices, unsigned int* indices, const char* 
 	length = (int)strlen(text);
 	offset = 0.0f;
 
-	vertices = new VertexType[length * 4];
-	if (!vertices)
-		throw std::exception("Error: could not create vertex array for Text");
 	vertexPtr = (VertexType*)vertices;
-
-	indices  = new unsigned int[length * 6];
-	if (!indices)
-		throw std::exception("Error: could not create index array for Text");
 
 	for (int i = 0; i < length; i++)
 	{

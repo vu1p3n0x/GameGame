@@ -26,9 +26,16 @@ namespace Wilt
 		ID3D11Buffer* m_indexBuffer;
 		int m_vertexCount;
 		int m_indexCount;
-		float m_positionX, m_positionY;
 		float m_red, m_blue, m_green;
 		bool m_recreate;
+
+		float m_positionX;
+		float m_positionY;
+		float m_rotation;
+		float m_scaleX;
+		float m_scaleY;
+		float m_originX;
+		float m_originY;
 
 		friend class Font;
 
